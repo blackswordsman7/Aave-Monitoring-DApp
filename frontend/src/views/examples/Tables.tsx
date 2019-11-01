@@ -15,7 +15,7 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React from 'react';
+import React from 'react'
 import {
   Badge,
   Card,
@@ -34,10 +34,10 @@ import {
   Container,
   Row,
   UncontrolledTooltip
-} from 'reactstrap';
+} from 'reactstrap'
 
 // Components
-import Header from '../../components/Headers/Header';
+import Header from '../components/Headers/Header'
 
 class Tables extends React.Component {
   render() {
@@ -1651,8 +1651,8 @@ class Tables extends React.Component {
           </Row>
         </Container>
       </>
-    );
+    )
   }
 }
 
-export default Tables;
+export default Tables

@@ -15,8 +15,8 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React from 'react';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
+import React from 'react'
+import { CopyToClipboard } from 'react-copy-to-clipboard'
 import {
   Card,
   CardHeader,
@@ -25,19 +25,19 @@ import {
   Row,
   Col,
   UncontrolledTooltip
-} from 'reactstrap';
+} from 'reactstrap'
 
 // Components
-import Header from '../../components/Headers/Header';
+import Header from '../components/Headers/Header'
 
 type State = {
-  copiedText: string;
-};
+  copiedText: string
+}
 
 class Icons extends React.Component<{}, State> {
   state = {
     copiedText: ''
-  };
+  }
 
   render() {
     return (
@@ -2901,8 +2901,8 @@ class Icons extends React.Component<{}, State> {
           </Row>
         </Container>
       </>
-    );
+    )
   }
 }
 
-export default Icons;
+export default Icons

@@ -15,8 +15,8 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React from 'react';
-import { Card, CardBody, CardTitle, Container, Row, Col } from 'reactstrap';
+import React from 'react'
+import { Card, CardBody, CardTitle, Container, Row, Col } from 'reactstrap'
 
 class Header extends React.Component {
   render() {
@@ -150,8 +150,8 @@ class Header extends React.Component {
           </Container>
         </div>
       </>
-    );
+    )
   }
 }
 
-export default Header;
+export default Header

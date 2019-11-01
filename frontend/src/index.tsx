@@ -15,24 +15,36 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
+import React from 'react'
+import ReactDOM from 'react-dom'
 
-import 'assets/vendor/nucleo/css/nucleo.css';
-import 'assets/vendor/@fortawesome/fontawesome-free/css/all.min.css';
-import 'assets/scss/argon-dashboard-react.scss';
+// Redux
+import configureStore, { history } from './redux/store'
+import { ConnectedRouter } from 'connected-react-router'
+import { Provider as ReduxProvider } from 'react-redux'
 
-import AdminLayout from './layouts/Admin';
-import AuthLayout from './layouts/Auth';
+// Styles
+import 'assets/vendor/nucleo/css/nucleo.css'
+import 'assets/vendor/@fortawesome/fontawesome-free/css/all.min.css'
+import 'assets/scss/argon-dashboard-react.scss'
+
+import App from './views/App'
+
+// Service Worker
+import * as serviceWorker from './serviceWorker'
+
+const reduxStore = configureStore()
 
 ReactDOM.render(
-  <BrowserRouter>
-    <Switch>
-      <Route path="/admin" render={props => <AdminLayout {...props} />} />
-      <Route path="/auth" render={props => <AuthLayout {...props} />} />
-      <Redirect from="/" to="/admin/index" />
-    </Switch>
-  </BrowserRouter>,
-  document.getElementById('root')
-);
+  <ReduxProvider store={reduxStore}>
+    <ConnectedRouter history={history}>
+      <App />
+    </ConnectedRouter>
+  </ReduxProvider>,
+  document.getElementById('app')
+)
+
+// If you want your app to work offline and load faster, you can change
+// unregister() to register() below. Note this comes with some pitfalls.
+// Learn more about service workers: https://bit.ly/CRA-PWA
+serviceWorker.unregister()

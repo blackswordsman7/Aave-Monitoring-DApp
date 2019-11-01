@@ -15,19 +15,14 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React from 'react';
-import { NavLink as NavLinkRRD, Link } from 'react-router-dom';
+import React from 'react'
+import { NavLink as NavLinkRRD, Link } from 'react-router-dom'
 import {
   Collapse,
   DropdownMenu,
   DropdownItem,
   UncontrolledDropdown,
   DropdownToggle,
-  Form,
-  Input,
-  InputGroupAddon,
-  InputGroupText,
-  InputGroup,
   Media,
   NavbarBrand,
   Navbar,
@@ -37,51 +32,45 @@ import {
   Container,
   Row,
   Col
-} from 'reactstrap';
+} from 'reactstrap'
 
 type Props = {
-  routes: Array<object>;
-  logo: {
-    innerLink: string;
-    outerLink: string;
-    imgSrc: string;
-    imgAlt: string;
-  };
-};
+  routes: Array<object>
+}
 
 class Sidebar extends React.Component<Props> {
   state = {
     collapseOpen: false
-  };
+  }
 
   static defaultProps = {
     routes: [{}]
-  };
+  }
 
   constructor(props) {
-    super(props);
-    this.activeRoute.bind(this);
+    super(props)
+    this.activeRoute.bind(this)
   }
 
   // verifies if routeName is the one active (in browser input)
   activeRoute(routeName) {
     // @ts-ignore
-    return this.props.location.pathname.indexOf(routeName) > -1 ? 'active' : '';
+    return this.props.location.pathname.indexOf(routeName) > -1 ? 'active' : ''
   }
 
   // toggles collapse between opened and closed (true/false)
   toggleCollapse = () => {
     this.setState({
       collapseOpen: !this.state.collapseOpen
-    });
-  };
+    })
+  }
 
   // closes the collapse
   closeCollapse = () => {
     this.setState({
       collapseOpen: false
-    });
-  };
+    })
+  }
 
   // creates the links that appear in the left menu / Sidebar
   createLinks = routes => {
@@ -89,7 +78,7 @@ class Sidebar extends React.Component<Props> {
       return (
         <NavItem key={key}>
           <NavLink
-            to={prop.layout + prop.path}
+            to={prop.path}
             tag={NavLinkRRD}
             onClick={this.closeCollapse}
             activeClassName="active"
@@ -98,23 +87,12 @@ class Sidebar extends React.Component<Props> {
             {prop.name}
           </NavLink>
         </NavItem>
-      );
-    });
-  };
+      )
+    })
+  }
   render() {
-    const { routes, logo } = this.props;
-    let navbarBrandProps;
-    if (logo && logo.innerLink) {
-      navbarBrandProps = {
-        to: logo.innerLink,
-        tag: Link
-      };
-    } else if (logo && logo.outerLink) {
-      navbarBrandProps = {
-        href: logo.outerLink,
-        target: '_blank'
-      };
-    }
+    const { routes } = this.props
+
     return (
       <Navbar
         className="navbar-vertical fixed-left navbar-light bg-white"
@@ -130,16 +108,11 @@ class Sidebar extends React.Component<Props> {
           >
             <span className="navbar-toggler-icon" />
           </button>
+
           {/* Brand */}
-          {logo ? (
-            <NavbarBrand className="pt-0" {...navbarBrandProps}>
-              <img
-                alt={logo.imgAlt}
-                className="navbar-brand-img"
-                src={logo.imgSrc}
-              />
-            </NavbarBrand>
-          ) : null}
+          <NavbarBrand className="pt-0" to="/" tag={Link}>
+            Aave Monitoring
+          </NavbarBrand>
           {/* User */}
           <Nav className="align-items-center d-md-none">
             <UncontrolledDropdown nav>
@@ -172,19 +145,19 @@ class Sidebar extends React.Component<Props> {
                 <DropdownItem className="noti-title" header tag="div">
                   <h6 className="text-overflow m-0">Welcome!</h6>
                 </DropdownItem>
-                <DropdownItem to="/admin/user-profile" tag={Link}>
+                <DropdownItem to="/user-profile" tag={Link}>
                   <i className="ni ni-single-02" />
                   <span>My profile</span>
                 </DropdownItem>
-                <DropdownItem to="/admin/user-profile" tag={Link}>
+                <DropdownItem to="/user-profile" tag={Link}>
                   <i className="ni ni-settings-gear-65" />
                   <span>Settings</span>
                 </DropdownItem>
-                <DropdownItem to="/admin/user-profile" tag={Link}>
+                <DropdownItem to="/user-profile" tag={Link}>
                   <i className="ni ni-calendar-grid-58" />
                   <span>Activity</span>
                 </DropdownItem>
-                <DropdownItem to="/admin/user-profile" tag={Link}>
+                <DropdownItem to="/user-profile" tag={Link}>
                   <i className="ni ni-support-16" />
                   <span>Support</span>
                 </DropdownItem>
@@ -201,19 +174,9 @@ class Sidebar extends React.Component<Props> {
             {/* Collapse header */}
             <div className="navbar-collapse-header d-md-none">
               <Row>
-                {logo ? (
-                  <Col className="collapse-brand" xs="6">
-                    {logo.innerLink ? (
-                      <Link to={logo.innerLink}>
-                        <img alt={logo.imgAlt} src={logo.imgSrc} />
-                      </Link>
-                    ) : (
-                      <a href={logo.outerLink}>
-                        <img alt={logo.imgAlt} src={logo.imgSrc} />
-                      </a>
-                    )}
-                  </Col>
-                ) : null}
+                <Col className="collapse-brand" xs="6">
+                  <Link to="/">Aave Monitoring</Link>
+                </Col>
                 <Col className="collapse-close" xs="6">
                   <button
                     className="navbar-toggler"
@@ -226,54 +189,14 @@ class Sidebar extends React.Component<Props> {
                 </Col>
               </Row>
             </div>
-            {/* Form */}
-            <Form className="mt-4 mb-3 d-md-none">
-              <InputGroup className="input-group-rounded input-group-merge">
-                <Input
-                  aria-label="Search"
-                  className="form-control-rounded form-control-prepended"
-                  placeholder="Search"
-                  type="search"
-                />
-                <InputGroupAddon addonType="prepend">
-                  <InputGroupText>
-                    <span className="fa fa-search" />
-                  </InputGroupText>
-                </InputGroupAddon>
-              </InputGroup>
-            </Form>
+
             {/* Navigation */}
             <Nav navbar>{this.createLinks(routes)}</Nav>
-            {/* Divider */}
-            <hr className="my-3" />
-            {/* Heading */}
-            <h6 className="navbar-heading text-muted">Documentation</h6>
-            {/* Navigation */}
-            <Nav className="mb-md-3" navbar>
-              <NavItem>
-                <NavLink href="https://demos.creative-tim.com/argon-dashboard-react/documentation/overview?ref=adr-admin-sidebar">
-                  <i className="ni ni-spaceship" />
-                  Getting started
-                </NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink href="https://demos.creative-tim.com/argon-dashboard-react/documentation/colors?ref=adr-admin-sidebar">
-                  <i className="ni ni-palette" />
-                  Foundation
-                </NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink href="https://demos.creative-tim.com/argon-dashboard-react/documentation/alerts?ref=adr-admin-sidebar">
-                  <i className="ni ni-ui-04" />
-                  Components
-                </NavLink>
-              </NavItem>
-            </Nav>
           </Collapse>
         </Container>
       </Navbar>
-    );
+    )
   }
 }
 
-export default Sidebar;
+export default Sidebar

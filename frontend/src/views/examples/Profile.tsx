@@ -15,7 +15,7 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React from 'react';
+import React from 'react'
 import {
   Button,
   Card,
@@ -27,10 +27,10 @@ import {
   Container,
   Row,
   Col
-} from 'reactstrap';
+} from 'reactstrap'
 
 // Components
-import UserHeader from '../../components/Headers/UserHeader';
+import UserHeader from '../components/Headers/UserHeader'
 
 class Profile extends React.Component {
   render() {
@@ -324,8 +324,8 @@ class Profile extends React.Component {
           </Row>
         </Container>
       </>
-    );
+    )
   }
 }
 
-export default Profile;
+export default Profile

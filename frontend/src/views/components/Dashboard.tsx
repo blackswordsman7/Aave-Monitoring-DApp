@@ -15,13 +15,13 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React from 'react';
+import React from 'react'
 // node.js library that concatenates classes (strings)
-import classnames from 'classnames';
+import classnames from 'classnames'
 // javascipt plugin for creating charts
-import Chart from 'chart.js';
+import Chart from 'chart.js'
 // react plugin used to create charts
-import { Line, Bar } from 'react-chartjs-2';
+import { Line, Bar } from 'react-chartjs-2'
 // reactstrap components
 import {
   Button,
@@ -36,7 +36,7 @@ import {
   Container,
   Row,
   Col
-} from 'reactstrap';
+} from 'reactstrap'
 
 // core components
 import {
@@ -44,32 +44,32 @@ import {
   parseOptions,
   chartExample1,
   chartExample2
-} from '../variables/Charts';
+} from '../../variables/Charts'
 
-import Header from '../components/Headers/Header';
+import Header from './Headers/Header'
 
-class Views extends React.Component {
+class Dashboard extends React.Component {
   state = {
     activeNav: 1,
     chartExample1Data: 'data1'
-  };
+  }
   toggleNavs = (e, index) => {
-    e.preventDefault();
+    e.preventDefault()
     this.setState({
       activeNav: index,
       chartExample1Data:
         this.state.chartExample1Data === 'data1' ? 'data2' : 'data1'
-    });
+    })
     const wow = () => {
-      console.log(this.state);
-    };
-    wow.bind(this);
-    setTimeout(() => wow(), 1000);
+      console.log(this.state)
+    }
+    wow.bind(this)
+    setTimeout(() => wow(), 1000)
     // this.chartReference.update();
-  };
+  }
   componentWillMount() {
     if (window.Chart) {
-      parseOptions(Chart, chartOptions());
+      parseOptions(Chart, chartOptions())
     }
   }
   render() {
@@ -347,8 +347,8 @@ class Views extends React.Component {
           </Row>
         </Container>
       </>
-    );
+    )
   }
 }
 
-export default Views;
+export default Dashboard
