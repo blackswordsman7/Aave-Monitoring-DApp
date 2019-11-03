@@ -15,35 +15,36 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import Dashboard from '../views/components/Dashboard'
-import Profile from '../views/examples/Profile'
-import Tables from '../views/examples/Tables'
-import Icons from '../views/examples/Icons'
+import * as Containers from '../views/containers'
 
 const routes = [
   {
-    path: '/dashboard',
+    path: '/',
+    exact: true,
     name: 'Dashboard',
     icon: 'ni ni-tv-2 text-primary',
-    component: Dashboard
+    component: Containers.DashboardContainer
   },
   {
     path: '/icons',
+    exact: false,
     name: 'Icons',
     icon: 'ni ni-planet text-blue',
-    component: Icons
+    component: Containers.IconsContainer
   },
   {
     path: '/user-profile',
+    exact: false,
     name: 'User Profile',
     icon: 'ni ni-single-02 text-yellow',
-    component: Profile
+    component: Containers.ProfileContainer
   },
   {
     path: '/tables',
+    exact: false,
     name: 'Tables',
     icon: 'ni ni-bullet-list-67 text-red',
-    component: Tables
+    component: Containers.TablesContainer
   }
 ]
 

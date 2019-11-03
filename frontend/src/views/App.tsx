@@ -21,6 +21,7 @@ import { connect } from 'react-redux'
 import { Container } from 'reactstrap'
 
 // Components
+import Header from './components/Header'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import Sidebar from './components/Sidebar'
@@ -29,22 +30,24 @@ import Sidebar from './components/Sidebar'
 import routes from '../routes'
 
 // Redux
+import { apiActions } from '../redux/modules/api'
 import { web3Actions } from '../redux/modules/web3'
 import { RootState } from '../redux/store'
 
 // Types
-import { DefaultProps } from '../core/props'
+import { AppProps } from '../core/props'
 
 const mapStateToProps = (state: RootState) => {
-  return { ...state.router, web3State: state.web3State }
+  return { ...state.router }
 }
 
-interface Props extends DefaultProps {
-  initWeb3: () => {}
-}
-
-class App extends React.Component<Props> {
+class App extends React.Component<AppProps> {
   componentDidMount() {
+    this.props.getEthPrice()
+    this.props.getTokenReserves()
+    this.props.getUsersCount()
+    this.props.getUserHealth()
+    this.props.getUserHistory()
     this.props.initWeb3()
   }
 
@@ -67,6 +70,8 @@ class App extends React.Component<Props> {
             brandText={this.getBrandText(this.props.location.pathname)}
           />
 
+          <Header />
+
           {routes.map(route => (
             <Route key={route.path} {...route} />
           ))}
@@ -83,6 +88,11 @@ class App extends React.Component<Props> {
 export default connect(
   mapStateToProps,
   {
+    getEthPrice: apiActions.getEthPrice,
+    getTokenReserves: apiActions.getTokenReserves,
+    getUsersCount: apiActions.getUsersCount,
+    getUserHealth: apiActions.getUserHealth,
+    getUserHistory: apiActions.getUserHistory,
     initWeb3: web3Actions.initWeb3
   }
 )(App)

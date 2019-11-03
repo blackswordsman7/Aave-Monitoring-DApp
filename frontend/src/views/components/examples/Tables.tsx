@@ -36,14 +36,13 @@ import {
   UncontrolledTooltip
 } from 'reactstrap'
 
-// Components
-import Header from '../components/Headers/Header'
+// Types
+import { DefaultProps } from '../../../core/props'
 
-class Tables extends React.Component {
+class Tables extends React.Component<DefaultProps> {
   render() {
     return (
       <>
-        <Header />
         {/* Page content */}
         <Container className="mt--7" fluid>
           {/* Table */}

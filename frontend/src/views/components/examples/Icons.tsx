@@ -27,14 +27,14 @@ import {
   UncontrolledTooltip
 } from 'reactstrap'
 
-// Components
-import Header from '../components/Headers/Header'
+// Types
+import { DefaultProps } from '../../../core/props'
 
 type State = {
   copiedText: string
 }
 
-class Icons extends React.Component<{}, State> {
+class Icons extends React.Component<DefaultProps, State> {
   state = {
     copiedText: ''
   }
@@ -42,10 +42,7 @@ class Icons extends React.Component<{}, State> {
   render() {
     return (
       <>
-        <Header />
-        {/* Page content */}
         <Container className=" mt--7" fluid>
-          {/* Table */}
           <Row>
             <div className=" col">
               <Card className=" shadow">
