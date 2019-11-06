@@ -16,25 +16,11 @@
 
 */
 import React from 'react'
-// import classnames from 'classnames'
 import Chart from 'chart.js'
-// import { Line, Bar } from 'react-chartjs-2'
-import {
-  Button,
-  Card,
-  CardHeader,
-  // CardBody,
-  // NavItem,
-  // NavLink,
-  // Nav,
-  Progress,
-  Table,
-  Container,
-  Row,
-  Col
-} from 'reactstrap'
+import { Card, CardHeader, Table, Container, Row, Col } from 'reactstrap'
 
 // Components
+import Token from './Token'
 import {
   chartOptions,
   parseOptions
@@ -73,143 +59,62 @@ class Dashboard extends React.Component<DefaultProps> {
   }*/
 
   render() {
-    const { usersCount } = this.props.apiState
+    const { tokenReserves, usersCount } = this.props.apiState
 
     return (
       <>
         <Container className="mt--7" fluid>
           <Row className="mt-5">
-            <Col className="mb-5 mb-xl-0" xl="4">
+            <Col className="mb-5 mb-xl-0" xl="12">
               <Card className="shadow">
                 <CardHeader className="border-0">
                   <Row className="align-items-center">
                     <div className="col">
-                      <h3 className="mb-0">Users Count</h3>
+                      <h3 className="mb-0">Protocol Overview</h3>
                     </div>
                   </Row>
                 </CardHeader>
                 <Table className="align-items-center table-flush" responsive>
                   <thead className="thead-light">
                     <tr>
-                      <th scope="col">Token</th>
+                      <th scope="col">Assets</th>
                       <th scope="col">Users</th>
+                      <th scope="col">Liquidity Available</th>
+                      <th scope="col">Deposit APR</th>
+                      <th scope="col">Stable Borrow APR</th>
+                      <th scope="col">Variable Borrow APR</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {Object.entries(usersCount).map(([token, count]) => (
-                      <tr key={token}>
-                        <th scope="row">{token}</th>
-                        <td>{count}</td>
+                    {tokenReserves.map(tr => (
+                      <tr key={tr.symbol}>
+                        <td>
+                          <Token token={tr.symbol} />
+                          <span className="ml-3">{tr.name}</span>
+                        </td>
+                        <td>{usersCount[tr.name]}</td>
+                        <td>
+                          {`${parseFloat(tr.availableLiquidity).toFixed(2)} ${
+                            tr.symbol
+                          }`}
+                        </td>
+                        <td>
+                          {`${(parseFloat(tr.liquidityRate) * 100).toFixed(
+                            2
+                          )} %`}
+                        </td>
+                        <td>
+                          {`${(parseFloat(tr.fixedBorrowRate) * 100).toFixed(
+                            2
+                          )} %`}
+                        </td>
+                        <td>
+                          {`${(parseFloat(tr.variableBorrowRate) * 100).toFixed(
+                            2
+                          )} %`}
+                        </td>
                       </tr>
                     ))}
-                  </tbody>
-                </Table>
-              </Card>
-            </Col>
-            <Col xl="8">
-              <Card className="shadow">
-                <CardHeader className="border-0">
-                  <Row className="align-items-center">
-                    <div className="col">
-                      <h3 className="mb-0">Social traffic</h3>
-                    </div>
-                    <div className="col text-right">
-                      <Button
-                        color="primary"
-                        href="#pablo"
-                        onClick={e => e.preventDefault()}
-                        size="sm"
-                      >
-                        See all
-                      </Button>
-                    </div>
-                  </Row>
-                </CardHeader>
-                <Table className="align-items-center table-flush" responsive>
-                  <thead className="thead-light">
-                    <tr>
-                      <th scope="col">Referral</th>
-                      <th scope="col">Visitors</th>
-                      <th scope="col" />
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <th scope="row">Facebook</th>
-                      <td>1,480</td>
-                      <td>
-                        <div className="d-flex align-items-center">
-                          <span className="mr-2">60%</span>
-                          <div>
-                            <Progress
-                              max="100"
-                              value="60"
-                              barClassName="bg-gradient-danger"
-                            />
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th scope="row">Facebook</th>
-                      <td>5,480</td>
-                      <td>
-                        <div className="d-flex align-items-center">
-                          <span className="mr-2">70%</span>
-                          <div>
-                            <Progress
-                              max="100"
-                              value="70"
-                              barClassName="bg-gradient-success"
-                            />
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th scope="row">Google</th>
-                      <td>4,807</td>
-                      <td>
-                        <div className="d-flex align-items-center">
-                          <span className="mr-2">80%</span>
-                          <div>
-                            <Progress max="100" value="80" />
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th scope="row">Instagram</th>
-                      <td>3,678</td>
-                      <td>
-                        <div className="d-flex align-items-center">
-                          <span className="mr-2">75%</span>
-                          <div>
-                            <Progress
-                              max="100"
-                              value="75"
-                              barClassName="bg-gradient-info"
-                            />
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th scope="row">twitter</th>
-                      <td>2,645</td>
-                      <td>
-                        <div className="d-flex align-items-center">
-                          <span className="mr-2">30%</span>
-                          <div>
-                            <Progress
-                              max="100"
-                              value="30"
-                              barClassName="bg-gradient-warning"
-                            />
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
                   </tbody>
                 </Table>
               </Card>

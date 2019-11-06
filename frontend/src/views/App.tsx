@@ -38,7 +38,7 @@ import { RootState } from '../redux/store'
 import { AppProps } from '../core/props'
 
 const mapStateToProps = (state: RootState) => {
-  return { ...state.router }
+  return { ...state.router, web3State: state.web3State }
 }
 
 class App extends React.Component<AppProps> {
@@ -66,8 +66,9 @@ class App extends React.Component<AppProps> {
         <Sidebar routes={routes} {...this.props} />
         <div className="main-content">
           <Navbar
-            {...this.props}
+            address={this.props.web3State.accounts[0]}
             brandText={this.getBrandText(this.props.location.pathname)}
+            initWeb3={this.props.initWeb3}
           />
 
           <Header />

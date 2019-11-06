@@ -19,10 +19,6 @@ import React from 'react'
 import { NavLink as NavLinkRRD, Link } from 'react-router-dom'
 import {
   Collapse,
-  DropdownMenu,
-  DropdownItem,
-  UncontrolledDropdown,
-  DropdownToggle,
   Media,
   NavbarBrand,
   Navbar,
@@ -45,17 +41,6 @@ class Sidebar extends React.Component<Props> {
 
   static defaultProps = {
     routes: [{}]
-  }
-
-  constructor(props) {
-    super(props)
-    this.activeRoute.bind(this)
-  }
-
-  // verifies if routeName is the one active (in browser input)
-  activeRoute(routeName) {
-    // @ts-ignore
-    return this.props.location.pathname.indexOf(routeName) > -1 ? 'active' : ''
   }
 
   // toggles collapse between opened and closed (true/false)
@@ -81,7 +66,7 @@ class Sidebar extends React.Component<Props> {
             to={prop.path}
             tag={NavLinkRRD}
             onClick={this.closeCollapse}
-            activeClassName="active"
+            exact={prop.exact}
           >
             <i className={prop.icon} />
             {prop.name}
@@ -100,7 +85,6 @@ class Sidebar extends React.Component<Props> {
         id="sidenav-main"
       >
         <Container fluid>
-          {/* Toggler */}
           <button
             className="navbar-toggler"
             type="button"
@@ -109,66 +93,21 @@ class Sidebar extends React.Component<Props> {
             <span className="navbar-toggler-icon" />
           </button>
 
-          {/* Brand */}
           <NavbarBrand className="pt-0" to="/" tag={Link}>
             Aave Monitoring
           </NavbarBrand>
-          {/* User */}
+
           <Nav className="align-items-center d-md-none">
-            <UncontrolledDropdown nav>
-              <DropdownToggle nav className="nav-link-icon">
-                <i className="ni ni-bell-55" />
-              </DropdownToggle>
-              <DropdownMenu
-                aria-labelledby="navbar-default_dropdown_1"
-                className="dropdown-menu-arrow"
-                right
-              >
-                <DropdownItem>Action</DropdownItem>
-                <DropdownItem>Another action</DropdownItem>
-                <DropdownItem divider />
-                <DropdownItem>Something else here</DropdownItem>
-              </DropdownMenu>
-            </UncontrolledDropdown>
-            <UncontrolledDropdown nav>
-              <DropdownToggle nav>
-                <Media className="align-items-center">
-                  <span className="avatar avatar-sm rounded-circle">
-                    <img
-                      alt="..."
-                      src={require('assets/img/theme/team-1-800x800.jpg')}
-                    />
-                  </span>
-                </Media>
-              </DropdownToggle>
-              <DropdownMenu className="dropdown-menu-arrow" right>
-                <DropdownItem className="noti-title" header tag="div">
-                  <h6 className="text-overflow m-0">Welcome!</h6>
-                </DropdownItem>
-                <DropdownItem to="/user-profile" tag={Link}>
-                  <i className="ni ni-single-02" />
-                  <span>My profile</span>
-                </DropdownItem>
-                <DropdownItem to="/user-profile" tag={Link}>
-                  <i className="ni ni-settings-gear-65" />
-                  <span>Settings</span>
-                </DropdownItem>
-                <DropdownItem to="/user-profile" tag={Link}>
-                  <i className="ni ni-calendar-grid-58" />
-                  <span>Activity</span>
-                </DropdownItem>
-                <DropdownItem to="/user-profile" tag={Link}>
-                  <i className="ni ni-support-16" />
-                  <span>Support</span>
-                </DropdownItem>
-                <DropdownItem divider />
-                <DropdownItem href="#pablo" onClick={e => e.preventDefault()}>
-                  <i className="ni ni-user-run" />
-                  <span>Logout</span>
-                </DropdownItem>
-              </DropdownMenu>
-            </UncontrolledDropdown>
+            <Media className="align-items-center">
+              <span className="avatar avatar-sm rounded-circle">
+                <img
+                  alt="..."
+                  src={require('assets/img/theme/team-1-800x800.jpg')}
+                />
+              </span>
+            </Media>
           </Nav>
+
           {/* Collapse */}
           <Collapse navbar isOpen={this.state.collapseOpen}>
             {/* Collapse header */}

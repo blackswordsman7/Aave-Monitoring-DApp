@@ -44,7 +44,7 @@ export interface UserHealth {
 export interface UserHistory {
   address: string
   amount: string
-  event_name: 'Borrow' | 'Deposit' | 'Repay'
+  event_name: 'Borrow' | 'Deposit' | 'Repay' | 'Redeem' | 'Swap' | 'Flashloan'
   reserve: string
   target: string
   timestamp: number

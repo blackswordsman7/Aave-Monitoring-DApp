@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 
-import Icons from '../components/examples/Icons'
+import History from '../components/History'
 import { RootState } from '../../redux/store'
 
 const mapStateToProps = (state: RootState) => {
@@ -10,4 +10,4 @@ const mapStateToProps = (state: RootState) => {
 export default connect(
   mapStateToProps,
   {}
-)(Icons)
+)(History)

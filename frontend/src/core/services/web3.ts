@@ -1,4 +1,3 @@
-import { List } from 'immutable'
 import Web3 from 'web3'
 
 export const getWeb3 = async () => {
@@ -30,7 +29,7 @@ export const getWeb3 = async () => {
   }
 
   // Get accounts from web3
-  const accounts = List(await web3.eth.getAccounts())
+  const accounts = await web3.eth.getAccounts()
 
   // Get network from web3
   const networkId = await web3.eth.net.getId()

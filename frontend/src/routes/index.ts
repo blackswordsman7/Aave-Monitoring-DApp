@@ -26,11 +26,11 @@ const routes = [
     component: Containers.DashboardContainer
   },
   {
-    path: '/icons',
+    path: '/history',
     exact: false,
-    name: 'Icons',
+    name: 'History',
     icon: 'ni ni-planet text-blue',
-    component: Containers.IconsContainer
+    component: Containers.HistoryContainer
   },
   {
     path: '/user-profile',
