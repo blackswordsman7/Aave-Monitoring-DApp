@@ -44,10 +44,8 @@ const mapStateToProps = (state: RootState) => {
 class App extends React.Component<AppProps> {
   componentDidMount() {
     this.props.getEthPrice()
-    this.props.getTokenReserves()
     this.props.getUsersCount()
     this.props.getUserHealth()
-    this.props.getUserHistory()
     this.props.initWeb3()
   }
 
@@ -90,10 +88,8 @@ export default connect(
   mapStateToProps,
   {
     getEthPrice: apiActions.getEthPrice,
-    getTokenReserves: apiActions.getTokenReserves,
     getUsersCount: apiActions.getUsersCount,
     getUserHealth: apiActions.getUserHealth,
-    getUserHistory: apiActions.getUserHistory,
     initWeb3: web3Actions.initWeb3
   }
 )(App)

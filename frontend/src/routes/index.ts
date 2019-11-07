@@ -36,22 +36,8 @@ const routes = [
     path: '/history',
     exact: false,
     name: 'History',
-    icon: 'ni ni-planet text-blue',
+    icon: 'ni ni-watch-time text-green',
     component: Containers.HistoryContainer
-  },
-  {
-    path: '/user-profile',
-    exact: false,
-    name: 'User Profile',
-    icon: 'ni ni-single-02 text-yellow',
-    component: Containers.ProfileContainer
-  },
-  {
-    path: '/tables',
-    exact: false,
-    name: 'Tables',
-    icon: 'ni ni-bullet-list-67 text-red',
-    component: Containers.TablesContainer
   }
 ]
 

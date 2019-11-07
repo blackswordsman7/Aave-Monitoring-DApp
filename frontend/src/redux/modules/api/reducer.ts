@@ -20,6 +20,9 @@ import {
   GET_USERS_COUNT_SUCCESS
 } from './'
 
+// Utils
+import { getTokenDetails } from '../../../core/utils'
+
 const iAS: ApiState = {
   error: null,
   ethPrice: 0,
@@ -52,14 +55,20 @@ export const apiReducer = (
     case GET_TOKEN_RESERVES:
       return { ...state, error: null, loading: true }
 
-    case GET_TOKEN_RESERVES_SUCCESS:
+    case GET_TOKEN_RESERVES_SUCCESS: {
+      const tokenReserves = action.payload.map(tr => {
+        tr.priceInUsd = (parseFloat(tr.priceInEth) * state.ethPrice).toString()
+        return tr
+      })
+
       return {
         ...state,
         error: null,
         loading: false,
         tokens: action.payload.map(({ name }) => name),
-        tokenReserves: action.payload
+        tokenReserves
       }
+    }
 
     case GET_USERS_COUNT:
       return { ...state, error: null, loading: true }
@@ -86,13 +95,20 @@ export const apiReducer = (
     case GET_USER_HISTORY:
       return { ...state, error: null, loading: true }
 
-    case GET_USER_HISTORY_SUCCESS:
+    case GET_USER_HISTORY_SUCCESS: {
+      const userHistory = action.payload.map((uh, index) => {
+        uh.id = index
+        uh.token = getTokenDetails(uh.reserve, state.tokenReserves)
+        return uh
+      })
+
       return {
         ...state,
         error: null,
         loading: false,
-        userHistory: action.payload
+        userHistory
       }
+    }
 
     case GET_ETH_PRICE_ERROR:
     case GET_TOKEN_RESERVES_ERROR:

@@ -79,7 +79,7 @@
   "lint-staged": {
     "./src/**/*.{ts,tsx}": [
       "yarn run prettier:ts",
-      "yarn run lint:fix",
+      "yarn run lint",
       "git add"
     ]
   },

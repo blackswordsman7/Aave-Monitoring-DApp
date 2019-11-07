@@ -3,52 +3,11 @@ import { Card, CardHeader, Container, Row, Col } from 'reactstrap'
 import BootstrapTable from 'react-bootstrap-table-next'
 import paginationFactory from 'react-bootstrap-table2-paginator'
 
-// Components
-import Identicon from './Identicon'
-
 // Types
 import { DefaultProps } from '../../core/props'
 
-// Utils
-import { fromBaseUnit, shortAddress } from '../../core/utils'
-
-const columns = [
-  {
-    dataField: 'address',
-    text: 'User',
-    sort: false,
-    // eslint-disable-next-line react/display-name
-    formatter: cell => {
-      return (
-        <React.Fragment>
-          <Identicon address={cell} size={30} />
-          <span className="ml-2">{shortAddress(cell)}</span>
-        </React.Fragment>
-      )
-    }
-  },
-  {
-    dataField: 'healthfactor',
-    text: 'Health Factor',
-    sort: true,
-    formatter: cell => {
-      const health = fromBaseUnit(cell, 18)
-      return health > 5 ? '5+' : health.toFixed(2)
-    },
-    sortFunc: (a, b, order) => {
-      return order === 'asc' ? a - b : b - a
-    }
-  },
-  {
-    dataField: 'totalcollateral',
-    text: 'Total Collateral',
-    sort: true,
-    formatter: cell => `${fromBaseUnit(cell, 18).toFixed(2)} ETH`,
-    sortFunc: (a, b, order) => {
-      return order === 'asc' ? a - b : b - a
-    }
-  }
-]
+// Table Columns
+import { userHealthColumns } from '../../core/columns'
 
 class History extends React.Component<DefaultProps> {
   render() {
@@ -70,7 +29,7 @@ class History extends React.Component<DefaultProps> {
                 <BootstrapTable
                   keyField="address"
                   data={userHealth}
-                  columns={columns}
+                  columns={userHealthColumns}
                   bordered={false}
                   pagination={paginationFactory({
                     alwaysShowAllBtns: true,

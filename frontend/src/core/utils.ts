@@ -29,6 +29,21 @@ export const fromBaseUnit = (value, decimals) => {
   return parseInt(value) / 10 ** decimals
 }
 
+/**
+ * Format ERC20 decimal amount to display
+ *
+ * @param amount
+ * @param decimals
+ * @param digits
+ * @return string
+ */
+export const parseAmount = (amount, decimals, digits = 2) => {
+  return fromBaseUnit(amount, decimals)
+    .toFixed(digits)
+    .toString()
+    .replace(`.${new Array(digits + 1).join('0')}`, '')
+}
+
 export const jsonKeyMapper = (json: any, keyMap: StringMap) => {
   let updatedJson
   const regex = new RegExp(Object.keys(keyMap).join('|'), 'g')

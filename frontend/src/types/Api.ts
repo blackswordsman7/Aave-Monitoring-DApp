@@ -11,6 +11,7 @@ export interface TokenReserve {
   isActive: boolean
   address: string
   priceInEth: string
+  priceInUsd: string
   baseLTVasCollateral: string
   reserveLiquidationThreshold: string
   variableBorrowIndex: string
@@ -45,7 +46,9 @@ export interface UserHistory {
   address: string
   amount: string
   event_name: 'Borrow' | 'Deposit' | 'Repay' | 'Redeem' | 'Swap' | 'Flashloan'
+  id?: number
   reserve: string
   target: string
   timestamp: number
+  token?: TokenReserve
 }

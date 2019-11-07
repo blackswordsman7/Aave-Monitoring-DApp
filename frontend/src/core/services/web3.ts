@@ -12,7 +12,7 @@ export const getWeb3 = async () => {
       // tslint:disable-next-line:no-any
       await (ethereum as any).enable()
     } catch (error) {
-      console.log(error)
+      // console.log(error)
     }
   } else if (typeof window.web3 !== 'undefined') {
     // Use Mist/MetaMask's provider

@@ -15,6 +15,7 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const Chart = require('chart.js')
 //
 // Chart extension for making the bars rounded
@@ -24,7 +25,7 @@ const Chart = require('chart.js')
 Chart.elements.Rectangle.prototype.draw = function() {
   const ctx = this._chart.ctx
   const vm = this._view
-  var left, right, top, bottom, signX, signY, borderSkipped, radius
+  let left, right, top, bottom, signX, signY, borderSkipped
   let borderWidth = vm.borderWidth
   // Set Radius Here
   // If radius is large enough to cause drawing errors a max radius is imposed
@@ -115,8 +116,7 @@ Chart.elements.Rectangle.prototype.draw = function() {
     const height = corners[0][1] - corners[1][1]
     const x = corners[1][0]
     const y = corners[1][1]
-    // eslint-disable-next-line
-    var radius: any = cornerRadius
+    let radius: any = cornerRadius
 
     // Fix radius being too large
     if (radius > height / 2) {

@@ -4,12 +4,14 @@ import { ajax } from 'rxjs/ajax'
 import { catchError, map, mergeMap } from 'rxjs/operators'
 
 import {
-  GET_USERS_COUNT,
   apiActions,
-  GET_TOKEN_RESERVES,
   GET_ETH_PRICE,
-  GET_USER_HISTORY,
-  GET_USER_HEALTH
+  GET_ETH_PRICE_SUCCESS,
+  GET_TOKEN_RESERVES,
+  GET_TOKEN_RESERVES_SUCCESS,
+  GET_USERS_COUNT,
+  GET_USER_HEALTH,
+  GET_USER_HISTORY
 } from './'
 import { RootAction, RootState } from '../../store'
 
@@ -37,6 +39,17 @@ const getEthPriceEpic: Epic<RootAction, RootAction, RootState> = action$ => {
   )
 }
 
+const getEthPriceSuccessEpic: Epic<
+  RootAction,
+  RootAction,
+  RootState
+> = action$ => {
+  return action$.pipe(
+    ofType(GET_ETH_PRICE_SUCCESS),
+    mergeMap(() => of(apiActions.getTokenReserves()))
+  )
+}
+
 const getTokenReservesEpic: Epic<
   RootAction,
   RootAction,
@@ -52,6 +65,17 @@ const getTokenReservesEpic: Epic<
         catchError(error => of(apiActions.getTokenReservesError(error)))
       )
     )
+  )
+}
+
+const getTokenReservesSuccessEpic: Epic<
+  RootAction,
+  RootAction,
+  RootState
+> = action$ => {
+  return action$.pipe(
+    ofType(GET_TOKEN_RESERVES_SUCCESS),
+    mergeMap(() => of(apiActions.getUserHistory()))
   )
 }
 
@@ -99,7 +123,9 @@ const getUserHistoryEpic: Epic<RootAction, RootAction, RootState> = action$ => {
 
 export default [
   getEthPriceEpic,
+  getEthPriceSuccessEpic,
   getTokenReservesEpic,
+  getTokenReservesSuccessEpic,
   getUsersCountEpic,
   getUserHealthEpic,
   getUserHistoryEpic
