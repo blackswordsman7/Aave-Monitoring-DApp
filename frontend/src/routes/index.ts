@@ -26,6 +26,13 @@ const routes = [
     component: Containers.DashboardContainer
   },
   {
+    path: '/health',
+    exact: false,
+    name: 'Health',
+    icon: 'ni ni-planet text-blue',
+    component: Containers.HealthContainer
+  },
+  {
     path: '/history',
     exact: false,
     name: 'History',

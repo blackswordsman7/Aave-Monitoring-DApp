@@ -30,7 +30,10 @@ class History extends React.Component<DefaultProps> {
                     </div>
                   </Row>
                 </CardHeader>
-                <Table className="align-items-center table-flush" responsive>
+                <Table
+                  className="align-items-center table-flush table-hover"
+                  responsive
+                >
                   <thead className="thead-light">
                     <tr>
                       <th scope="col">User</th>

@@ -4,7 +4,7 @@ import { DeepReadonly } from 'utility-types'
 import { ZERO_ADDRESS } from './constants'
 
 // Types
-import { Artifact, StringMap, TokenReserve, UserHistory } from '../types'
+import { Artifact, StringMap, TokenReserve } from '../types'
 
 /**
  * gets contract address from .json truffle artifacts

@@ -1,0 +1,61 @@
+.react-bootstrap-table {
+  th {
+    background-color: $table-head-bg;
+    color: $table-head-color;
+  }
+}
+
+.react-bootstrap-table-pagination {
+  ul {
+    padding-left: calc(100% - 310px);
+  }
+}
+
+.react-bootstrap-table th.sortable {
+  cursor: pointer;
+}
+
+.react-bootstrap-table th .order > .dropdown > .caret {
+  margin: 10px 0 10px 5px;
+  color: #cccccc;
+}
+
+.react-bootstrap-table th .order > .dropup > .caret {
+  margin: 10px 0;
+  color: #cccccc;
+}
+
+.react-bootstrap-table th > .react-bootstrap-table-sort-order > .caret {
+  margin: 10px 6.5px;
+}
+
+.react-bootstrap-table th .order-4:before {
+  margin-left: 3.5px;
+  content: "\2191";
+  opacity: 0.4;
+}
+
+.react-bootstrap-table th .order-4:after {
+  content: "\2193";
+  opacity: 0.4;
+}
+
+.react-bootstrap-table th .caret-4-asc:before {
+  margin-left: 3.5px;
+  content: "\2191";
+}
+
+.react-bootstrap-table th .caret-4-asc:after {
+  content: "\2193";
+  opacity: 0.4;
+}
+
+.react-bootstrap-table th .caret-4-desc:before {
+  margin-left: 3.5px;
+  content: "\2191";
+  opacity: 0.4;
+}
+
+.react-bootstrap-table th .caret-4-desc:after {
+  content: "\2193";
+}
