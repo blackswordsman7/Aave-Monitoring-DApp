@@ -10,47 +10,71 @@ import Select, {
 } from 'react-select'
 
 // Components
+import EventBadge from './EventBadge'
 import Token from './Token'
 
 // Types
 import { DefaultProps } from '../../core/props'
+import { TokenReserve } from '../../types'
 
 // Table Columns
 import {
   defaultSortedUserHistory,
   userHistoryColumns
 } from '../../core/columns'
-import { TokenReserve } from '../../types'
 
 const TokenOption = (props: OptionProps<any>) => {
   const { data } = props
   return (
     <components.Option {...props}>
-      <Token token={data.value} />
+      <Token size={22} token={data.value} />
       <span className="ml-2">{data.value}</span>
+    </components.Option>
+  )
+}
+
+const EventOption = (props: OptionProps<any>) => {
+  const { data } = props
+  return (
+    <components.Option {...props}>
+      <EventBadge event={data.value} />
     </components.Option>
   )
 }
 
 const TokenValue = (props: SingleValueProps<any>) => (
   <components.SingleValue {...props}>
-    <Token token={props.children as string} />
+    <Token size={22} token={props.children as string} />
     <span className="ml-2">{props.children}</span>
+  </components.SingleValue>
+)
+
+const EventValue = (props: SingleValueProps<any>) => (
+  <components.SingleValue {...props}>
+    <EventBadge event={props.children as string} />
   </components.SingleValue>
 )
 
 const eventOptions = [
   { label: 'Borrow', value: 'Borrow' },
   { label: 'Deposit', value: 'Deposit' },
-  { label: 'Repay', value: 'Repay' },
+  { label: 'Flashloan', value: 'Flashloan' },
   { label: 'Redeem', value: 'Redeem' },
-  { label: 'Swap', value: 'Borrow' },
-  { label: 'Flashloan', value: 'Flashloan' }
+  { label: 'Repay', value: 'Repay' },
+  { label: 'Swap', value: 'Swap' }
 ]
 
 class History extends React.Component<DefaultProps> {
   state = {
+    filters: {
+      event: '',
+      token: ''
+    },
     history: []
+  }
+
+  componentDidMount() {
+    this.setState({ history: this.props.apiState.userHistory })
   }
 
   componentDidUpdate(prevProps: Readonly<DefaultProps>): void {
@@ -62,30 +86,31 @@ class History extends React.Component<DefaultProps> {
     }
   }
 
-  _onTokenFilter = option => {
-    const { userHistory } = this.props.apiState
-
-    if (option) {
-      const history = userHistory.filter(
-        uh => (uh.token as TokenReserve).symbol === option.value
-      )
-
-      this.setState({ history })
-    } else {
-      this.setState({ history: userHistory })
-    }
+  _onFilter = (option, filterType) => {
+    this.setState(
+      {
+        filters: {
+          ...this.state.filters,
+          [filterType]: option ? option.value : ''
+        }
+      },
+      () => this._filteredHistory()
+    )
   }
 
-  _onEventFilter = option => {
+  _filteredHistory = () => {
     const { userHistory } = this.props.apiState
+    const { filters } = this.state
 
-    if (option) {
-      const history = userHistory.filter(uh => uh.event_name === option.value)
+    const history = userHistory
+      .filter(uh =>
+        filters.token
+          ? (uh.token as TokenReserve).symbol === filters.token
+          : true
+      )
+      .filter(uh => (filters.event ? uh.event_name === filters.event : true))
 
-      this.setState({ history })
-    } else {
-      this.setState({ history: userHistory })
-    }
+    this.setState({ history })
   }
 
   render() {
@@ -114,15 +139,25 @@ class History extends React.Component<DefaultProps> {
                           SingleValue: TokenValue
                         }}
                         options={tokenOptions}
-                        onChange={this._onTokenFilter}
+                        onChange={option => this._onFilter(option, 'token')}
+                        placeholder="Token"
+                        className="react-select-container"
+                        classNamePrefix="react-select"
                         isClearable
                       />
                     </Col>
                     <Col md="3" xl="2">
                       <Select
                         closeMenuOnScroll={true}
+                        components={{
+                          Option: EventOption,
+                          SingleValue: EventValue
+                        }}
                         options={eventOptions}
-                        onChange={this._onEventFilter}
+                        onChange={option => this._onFilter(option, 'event')}
+                        placeholder="Event"
+                        className="react-select-container"
+                        classNamePrefix="react-select"
                         isClearable
                       />
                     </Col>

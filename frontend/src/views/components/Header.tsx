@@ -16,10 +16,48 @@
 
 */
 import React from 'react'
-import { Card, CardBody, CardTitle, Container, Row, Col } from 'reactstrap'
+import { connect } from 'react-redux'
+import {
+  Card,
+  CardBody,
+  CardTitle,
+  Container,
+  Row,
+  Col,
+  Tooltip
+} from 'reactstrap'
 
-class Header extends React.Component {
+// Types
+import { HeaderProps } from '../../core/props'
+import { RootState } from '../../redux/store'
+
+class Header extends React.Component<HeaderProps> {
+  state = {
+    showVolumeTooltip: false
+  }
+
+  toggle = () => {
+    this.setState({ showVolumeTooltip: !this.state.showVolumeTooltip })
+  }
+
   render() {
+    const {
+      ethPrice,
+      tokenReserves,
+      userHistory,
+      usersCount
+    } = this.props.apiState
+    const { showVolumeTooltip } = this.state
+
+    const totalUsersCount = Object.keys(usersCount).reduce(
+      (sum, key) => sum + (usersCount[key] || 0),
+      0
+    )
+
+    const volume = tokenReserves
+      .map(tr => parseFloat(tr.totalLiquidity) * parseFloat(tr.priceInEth))
+      .reduce((a, b) => a + b, 0)
+
     return (
       <>
         <div className="header bg-gradient-info pb-8 pt-5 pt-md-8">
@@ -38,7 +76,7 @@ class Header extends React.Component {
                             Traffic
                           </CardTitle>
                           <span className="h2 font-weight-bold mb-0">
-                            350,897
+                            {userHistory.length}
                           </span>
                         </div>
                         <Col className="col-auto">
@@ -47,12 +85,6 @@ class Header extends React.Component {
                           </div>
                         </Col>
                       </Row>
-                      <p className="mt-3 mb-0 text-muted text-sm">
-                        <span className="text-success mr-2">
-                          <i className="fa fa-arrow-up" /> 3.48%
-                        </span>{' '}
-                        <span className="text-nowrap">Since last month</span>
-                      </p>
                     </CardBody>
                   </Card>
                 </Col>
@@ -68,21 +100,15 @@ class Header extends React.Component {
                             Users
                           </CardTitle>
                           <span className="h2 font-weight-bold mb-0">
-                            2,356
+                            {totalUsersCount}
                           </span>
                         </div>
                         <Col className="col-auto">
                           <div className="icon icon-shape bg-warning text-white rounded-circle shadow">
-                            <i className="fas fa-chart-pie" />
+                            <i className="fas fa-users" />
                           </div>
                         </Col>
                       </Row>
-                      <p className="mt-3 mb-0 text-muted text-sm">
-                        <span className="text-danger mr-2">
-                          <i className="fas fa-arrow-down" /> 3.48%
-                        </span>{' '}
-                        <span className="text-nowrap">Since last week</span>
-                      </p>
                     </CardBody>
                   </Card>
                 </Col>
@@ -95,22 +121,36 @@ class Header extends React.Component {
                             tag="h5"
                             className="text-uppercase text-muted mb-0"
                           >
-                            Sales
+                            Volume
                           </CardTitle>
-                          <span className="h2 font-weight-bold mb-0">924</span>
+                          <span
+                            className="h2 font-weight-bold mb-0"
+                            id="VolumeTooltip"
+                          >
+                            {new Intl.NumberFormat('en-US', {
+                              style: 'currency',
+                              currency: 'ETH',
+                              currencyDisplay: 'name'
+                            }).format(volume)}
+                          </span>
+                          <Tooltip
+                            placement="top"
+                            isOpen={showVolumeTooltip}
+                            target="VolumeTooltip"
+                            toggle={this.toggle}
+                          >
+                            {new Intl.NumberFormat('en-US', {
+                              style: 'currency',
+                              currency: 'USD'
+                            }).format(volume * ethPrice)}
+                          </Tooltip>
                         </div>
                         <Col className="col-auto">
                           <div className="icon icon-shape bg-yellow text-white rounded-circle shadow">
-                            <i className="fas fa-users" />
+                            <i className="ni ni-money-coins" />
                           </div>
                         </Col>
                       </Row>
-                      <p className="mt-3 mb-0 text-muted text-sm">
-                        <span className="text-warning mr-2">
-                          <i className="fas fa-arrow-down" /> 1.10%
-                        </span>{' '}
-                        <span className="text-nowrap">Since yesterday</span>
-                      </p>
                     </CardBody>
                   </Card>
                 </Col>
@@ -135,12 +175,6 @@ class Header extends React.Component {
                           </div>
                         </Col>
                       </Row>
-                      <p className="mt-3 mb-0 text-muted text-sm">
-                        <span className="text-success mr-2">
-                          <i className="fas fa-arrow-up" /> 12%
-                        </span>{' '}
-                        <span className="text-nowrap">Since last month</span>
-                      </p>
                     </CardBody>
                   </Card>
                 </Col>
@@ -153,4 +187,11 @@ class Header extends React.Component {
   }
 }
 
-export default Header
+const mapStateToProps = (state: RootState) => {
+  return { ...state }
+}
+
+export default connect(
+  mapStateToProps,
+  {}
+)(Header)

@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 
-import Dashboard from '../components/Dashboard'
+import Home from '../components/Home'
 import { RootState } from '../../redux/store'
 
 const mapStateToProps = (state: RootState) => {
@@ -10,4 +10,4 @@ const mapStateToProps = (state: RootState) => {
 export default connect(
   mapStateToProps,
   {}
-)(Dashboard)
+)(Home)

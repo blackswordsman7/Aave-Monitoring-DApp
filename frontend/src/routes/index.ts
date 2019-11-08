@@ -21,9 +21,9 @@ const routes = [
   {
     path: '/',
     exact: true,
-    name: 'Dashboard',
+    name: 'Overview',
     icon: 'ni ni-tv-2 text-primary',
-    component: Containers.DashboardContainer
+    component: Containers.HomeContainer
   },
   {
     path: '/health',

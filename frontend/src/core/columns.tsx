@@ -2,6 +2,7 @@ import React from 'react'
 import moment from 'moment'
 
 // Components
+import EventBadge from '../views/components/EventBadge'
 import Identicon from '../views/components/Identicon'
 import Token from '../views/components/Token'
 
@@ -73,7 +74,7 @@ export const userHistoryColumns = [
     formatter: (cell, row) => {
       return (
         <React.Fragment>
-          <Token token={row.token.symbol} />
+          <Token size={24} token={row.token.symbol} />
           <span className="ml-2">{parseAmount(cell, 18)}</span>
           <span className="ml-2">{row.token.symbol}</span>
         </React.Fragment>
@@ -85,7 +86,7 @@ export const userHistoryColumns = [
     text: 'Event',
     sort: false,
     // eslint-disable-next-line react/display-name
-    formatter: cell => <span className="badge badge-info">{cell}</span>,
+    formatter: cell => <EventBadge event={cell} />,
     sortFunc: (a, b, order) =>
       order === 'asc' ? a.localeCompare(b) : b.localeCompare(a)
   },

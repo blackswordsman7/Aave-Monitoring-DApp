@@ -16,7 +16,15 @@
 
 */
 import React from 'react'
-import { Card, CardHeader, Table, Container, Row, Col } from 'reactstrap'
+import {
+  Card,
+  CardHeader,
+  Table,
+  Container,
+  Row,
+  Col,
+  Tooltip
+} from 'reactstrap'
 
 // Components
 import Token from './Token'
@@ -24,7 +32,23 @@ import Token from './Token'
 // Types
 import { DefaultProps } from '../../core/props'
 
-class Dashboard extends React.Component<DefaultProps> {
+class Home extends React.Component<DefaultProps> {
+  state = {}
+
+  toggle = targetName => {
+    if (!this.state[targetName]) {
+      this.setState({
+        ...this.state,
+        [targetName]: true
+      })
+    } else {
+      this.setState({
+        ...this.state,
+        [targetName]: !this.state[targetName]
+      })
+    }
+  }
+
   render() {
     const { tokenReserves, usersCount } = this.props.apiState
 
@@ -59,14 +83,39 @@ class Dashboard extends React.Component<DefaultProps> {
                     {tokenReserves.map(tr => (
                       <tr key={tr.symbol}>
                         <td>
-                          <Token token={tr.symbol} />
+                          <Token size={30} token={tr.symbol} />
                           <span className="ml-3">{tr.name}</span>
                         </td>
                         <td>{usersCount[tr.name]}</td>
                         <td>
-                          {`${parseFloat(tr.availableLiquidity).toFixed(2)} ${
-                            tr.symbol
-                          }`}
+                          <span id={`${tr.symbol.toLowerCase()}Tooltip`}>
+                            {new Intl.NumberFormat('en-US', {
+                              style: 'currency',
+                              currency: 'USD',
+                              currencyDisplay: 'name'
+                            })
+                              .format(parseFloat(tr.availableLiquidity))
+                              .replace('US dollars', tr.symbol)}
+                          </span>
+                          <Tooltip
+                            placement="top"
+                            isOpen={
+                              this.state[`${tr.symbol.toLowerCase()}Tooltip`]
+                            }
+                            target={`${tr.symbol.toLowerCase()}Tooltip`}
+                            toggle={() =>
+                              this.toggle(`${tr.symbol.toLowerCase()}Tooltip`)
+                            }
+                          >
+                            {new Intl.NumberFormat('en-US', {
+                              style: 'currency',
+                              currency: 'ETH',
+                              currencyDisplay: 'name'
+                            }).format(
+                              parseFloat(tr.availableLiquidity) *
+                                parseFloat(tr.priceInEth)
+                            )}
+                          </Tooltip>
                         </td>
                         <td>
                           {`${(parseFloat(tr.liquidityRate) * 100).toFixed(
@@ -96,4 +145,4 @@ class Dashboard extends React.Component<DefaultProps> {
   }
 }
 
-export default Dashboard
+export default Home

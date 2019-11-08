@@ -18,6 +18,7 @@ import WBTC from 'assets/img/tokens/wbtc.svg'
 import ZRX from 'assets/img/tokens/zrx.svg'
 
 interface Props {
+  size: number
   token: string
 }
 
@@ -101,8 +102,8 @@ const Token = (props: Props) => {
     <img
       src={getTokenLogo()}
       alt={`${props.token} Logo`}
-      width="30px"
-      height="30px"
+      width={`${props.size}px`}
+      height={`${props.size}px`}
     />
   )
 }
