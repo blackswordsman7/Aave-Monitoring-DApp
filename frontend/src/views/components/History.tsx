@@ -2,6 +2,15 @@ import React from 'react'
 import { Card, CardHeader, Container, Row, Col } from 'reactstrap'
 import BootstrapTable from 'react-bootstrap-table-next'
 import paginationFactory from 'react-bootstrap-table2-paginator'
+import Select, {
+  components,
+  OptionProps,
+  OptionTypeBase,
+  SingleValueProps
+} from 'react-select'
+
+// Components
+import Token from './Token'
 
 // Types
 import { DefaultProps } from '../../core/props'
@@ -11,10 +20,80 @@ import {
   defaultSortedUserHistory,
   userHistoryColumns
 } from '../../core/columns'
+import { TokenReserve } from '../../types'
+
+const TokenOption = (props: OptionProps<any>) => {
+  const { data } = props
+  return (
+    <components.Option {...props}>
+      <Token token={data.value} />
+      <span className="ml-2">{data.value}</span>
+    </components.Option>
+  )
+}
+
+const TokenValue = (props: SingleValueProps<any>) => (
+  <components.SingleValue {...props}>
+    <Token token={props.children as string} />
+    <span className="ml-2">{props.children}</span>
+  </components.SingleValue>
+)
+
+const eventOptions = [
+  { label: 'Borrow', value: 'Borrow' },
+  { label: 'Deposit', value: 'Deposit' },
+  { label: 'Repay', value: 'Repay' },
+  { label: 'Redeem', value: 'Redeem' },
+  { label: 'Swap', value: 'Borrow' },
+  { label: 'Flashloan', value: 'Flashloan' }
+]
 
 class History extends React.Component<DefaultProps> {
-  render() {
+  state = {
+    history: []
+  }
+
+  componentDidUpdate(prevProps: Readonly<DefaultProps>): void {
+    if (
+      JSON.stringify(prevProps.apiState.userHistory) !==
+      JSON.stringify(this.props.apiState.userHistory)
+    ) {
+      this.setState({ history: this.props.apiState.userHistory })
+    }
+  }
+
+  _onTokenFilter = option => {
     const { userHistory } = this.props.apiState
+
+    if (option) {
+      const history = userHistory.filter(
+        uh => (uh.token as TokenReserve).symbol === option.value
+      )
+
+      this.setState({ history })
+    } else {
+      this.setState({ history: userHistory })
+    }
+  }
+
+  _onEventFilter = option => {
+    const { userHistory } = this.props.apiState
+
+    if (option) {
+      const history = userHistory.filter(uh => uh.event_name === option.value)
+
+      this.setState({ history })
+    } else {
+      this.setState({ history: userHistory })
+    }
+  }
+
+  render() {
+    const { tokens } = this.props.apiState
+    const { history } = this.state
+
+    const tokenOptions: Array<OptionTypeBase> = []
+    tokens.map(token => tokenOptions.push({ label: token, value: token }))
 
     return (
       <>
@@ -24,14 +103,34 @@ class History extends React.Component<DefaultProps> {
               <Card className="shadow">
                 <CardHeader className="border-0">
                   <Row className="align-items-center">
-                    <div className="col">
+                    <Col md="6" xl="8">
                       <h3 className="mb-0">History</h3>
-                    </div>
+                    </Col>
+                    <Col md="3" xl="2">
+                      <Select
+                        closeMenuOnScroll={true}
+                        components={{
+                          Option: TokenOption,
+                          SingleValue: TokenValue
+                        }}
+                        options={tokenOptions}
+                        onChange={this._onTokenFilter}
+                        isClearable
+                      />
+                    </Col>
+                    <Col md="3" xl="2">
+                      <Select
+                        closeMenuOnScroll={true}
+                        options={eventOptions}
+                        onChange={this._onEventFilter}
+                        isClearable
+                      />
+                    </Col>
                   </Row>
                 </CardHeader>
                 <BootstrapTable
                   keyField="id"
-                  data={userHistory}
+                  data={history}
                   columns={userHistoryColumns}
                   defaultSorted={defaultSortedUserHistory}
                   bordered={false}
@@ -44,6 +143,7 @@ class History extends React.Component<DefaultProps> {
                   bootstrap4={true}
                   classes="align-items-center table-flush"
                   wrapperClasses="table-responsive"
+                  noDataIndication="Looks like there's no data on the applied filters!"
                   hover
                 />
               </Card>

@@ -83,7 +83,7 @@ export const userHistoryColumns = [
   {
     dataField: 'event_name',
     text: 'Event',
-    sort: true,
+    sort: false,
     // eslint-disable-next-line react/display-name
     formatter: cell => <span className="badge badge-info">{cell}</span>,
     sortFunc: (a, b, order) =>

@@ -65,7 +65,7 @@ export const apiReducer = (
         ...state,
         error: null,
         loading: false,
-        tokens: action.payload.map(({ name }) => name),
+        tokens: action.payload.map(({ symbol }) => symbol),
         tokenReserves
       }
     }
