@@ -22,7 +22,8 @@ import {
   Container,
   Media,
   Nav,
-  Navbar as ReactstrapNav
+  Navbar as ReactstrapNav,
+  Spinner
 } from 'reactstrap'
 
 // Components
@@ -35,11 +36,12 @@ type Props = {
   address: string
   brandText: string
   initWeb3: () => {}
+  loading: boolean
 }
 
 class Navbar extends React.Component<Props> {
   render() {
-    const { address, brandText, initWeb3 } = this.props
+    const { address, brandText, initWeb3, loading } = this.props
 
     return (
       <>
@@ -67,7 +69,20 @@ class Navbar extends React.Component<Props> {
                   </Media>
                 </Media>
               ) : (
-                <Button onClick={() => initWeb3()}>Connect</Button>
+                <Button onClick={() => initWeb3()} disabled={loading}>
+                  {loading ? (
+                    <Spinner
+                      color="primary"
+                      style={{
+                        width: '1.5rem',
+                        height: '1.5rem',
+                        margin: '0 2rem'
+                      }}
+                    />
+                  ) : (
+                    'Connect'
+                  )}
+                </Button>
               )}
             </Nav>
           </Container>

@@ -26,7 +26,11 @@ import { getTokenDetails } from '../../../core/utils'
 const iAS: ApiState = {
   error: null,
   ethPrice: 0,
-  loading: false,
+  isLoadingCount: false,
+  isLoadingHealth: false,
+  isLoadingHistory: false,
+  isLoadingPrice: false,
+  isLoadingReserves: false,
   tokens: [],
   tokenReserves: [],
   usersCount: {},
@@ -42,18 +46,25 @@ export const apiReducer = (
 ): ApiState => {
   switch (action.type) {
     case GET_ETH_PRICE:
-      return { ...state, error: null, loading: true }
+      return { ...state, error: null, isLoadingPrice: true }
 
     case GET_ETH_PRICE_SUCCESS:
       return {
         ...state,
         error: null,
-        loading: false,
+        isLoadingPrice: false,
         ethPrice: action.payload
       }
 
+    case GET_ETH_PRICE_ERROR:
+      return {
+        ...state,
+        error: action.payload,
+        isLoadingPrice: false
+      }
+
     case GET_TOKEN_RESERVES:
-      return { ...state, error: null, loading: true }
+      return { ...state, error: null, isLoadingReserves: true }
 
     case GET_TOKEN_RESERVES_SUCCESS: {
       const tokenReserves = action.payload.map(tr => {
@@ -64,36 +75,57 @@ export const apiReducer = (
       return {
         ...state,
         error: null,
-        loading: false,
+        isLoadingReserves: false,
         tokens: action.payload.map(({ symbol }) => symbol),
         tokenReserves
       }
     }
 
+    case GET_TOKEN_RESERVES_ERROR:
+      return {
+        ...state,
+        error: action.payload,
+        isLoadingReserves: false
+      }
+
     case GET_USERS_COUNT:
-      return { ...state, error: null, loading: true }
+      return { ...state, error: null, isLoadingCount: true }
 
     case GET_USERS_COUNT_SUCCESS:
       return {
         ...state,
         error: null,
-        loading: false,
+        isLoadingCount: false,
         usersCount: action.payload
       }
 
+    case GET_USERS_COUNT_ERROR:
+      return {
+        ...state,
+        error: action.payload,
+        isLoadingCount: false
+      }
+
     case GET_USER_HEALTH:
-      return { ...state, error: null, loading: true }
+      return { ...state, error: null, isLoadingHealth: true }
 
     case GET_USER_HEALTH_SUCCESS:
       return {
         ...state,
         error: null,
-        loading: false,
+        isLoadingHealth: false,
         userHealth: action.payload
       }
 
+    case GET_USER_HEALTH_ERROR:
+      return {
+        ...state,
+        error: action.payload,
+        isLoadingHealth: false
+      }
+
     case GET_USER_HISTORY:
-      return { ...state, error: null, loading: true }
+      return { ...state, error: null, isLoadingHistory: true }
 
     case GET_USER_HISTORY_SUCCESS: {
       const userHistory = action.payload.map((uh, index) => {
@@ -105,20 +137,16 @@ export const apiReducer = (
       return {
         ...state,
         error: null,
-        loading: false,
+        isLoadingHistory: false,
         userHistory
       }
     }
 
-    case GET_ETH_PRICE_ERROR:
-    case GET_TOKEN_RESERVES_ERROR:
-    case GET_USERS_COUNT_ERROR:
-    case GET_USER_HEALTH_ERROR:
     case GET_USER_HISTORY_ERROR:
       return {
         ...state,
         error: action.payload,
-        loading: false
+        isLoadingHistory: false
       }
 
     default:

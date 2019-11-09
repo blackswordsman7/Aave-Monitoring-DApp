@@ -31,6 +31,7 @@ import {
 } from 'reactstrap'
 
 type Props = {
+  address: string
   routes: Array<object>
 }
 
@@ -57,26 +58,30 @@ class Sidebar extends React.Component<Props> {
     })
   }
 
-  // creates the links that appear in the left menu / Sidebar
-  createLinks = routes => {
+  createLinks = (routes, type) => {
     return routes.map((prop, key) => {
-      return (
-        <NavItem key={key}>
-          <NavLink
-            to={prop.path}
-            tag={NavLinkRRD}
-            onClick={this.closeCollapse}
-            exact={prop.exact}
-          >
-            <i className={prop.icon} />
-            {prop.name}
-          </NavLink>
-        </NavItem>
-      )
+      if (prop.type === type) {
+        return (
+          <NavItem key={key}>
+            <NavLink
+              to={prop.path}
+              tag={NavLinkRRD}
+              onClick={this.closeCollapse}
+              exact={prop.exact}
+            >
+              <i className={prop.icon} />
+              {prop.name}
+            </NavLink>
+          </NavItem>
+        )
+      }
+
+      return null
     })
   }
+
   render() {
-    const { routes } = this.props
+    const { address, routes } = this.props
 
     return (
       <Navbar
@@ -129,8 +134,14 @@ class Sidebar extends React.Component<Props> {
               </Row>
             </div>
 
-            {/* Navigation */}
-            <Nav navbar>{this.createLinks(routes)}</Nav>
+            <Nav navbar>{this.createLinks(routes, 'common')}</Nav>
+
+            {address && (
+              <>
+                <hr className="my-3" />
+                <Nav navbar>{this.createLinks(routes, 'user')}</Nav>
+              </>
+            )}
           </Collapse>
         </Container>
       </Navbar>

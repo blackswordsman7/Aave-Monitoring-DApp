@@ -19,6 +19,7 @@ import React from 'react'
 import { Route } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { Container } from 'reactstrap'
+import { ToastContainer } from 'react-toastify'
 
 // Components
 import Header from './components/Header'
@@ -51,7 +52,7 @@ class App extends React.Component<AppProps> {
 
   getBrandText = path => {
     for (let i = 0; i < routes.length; i++) {
-      if (path.indexOf(routes[i].path) !== -1) {
+      if (path === routes[i].path) {
         return routes[i].name
       }
     }
@@ -59,14 +60,17 @@ class App extends React.Component<AppProps> {
   }
 
   render() {
+    const address = this.props.web3State.accounts[0]
+
     return (
       <>
-        <Sidebar routes={routes} {...this.props} />
+        <Sidebar address={address} routes={routes} />
         <div className="main-content">
           <Navbar
-            address={this.props.web3State.accounts[0]}
+            address={address}
             brandText={this.getBrandText(this.props.location.pathname)}
             initWeb3={this.props.initWeb3}
+            loading={this.props.web3State.loading}
           />
 
           <Header />
@@ -79,6 +83,7 @@ class App extends React.Component<AppProps> {
             <Footer />
           </Container>
         </div>
+        <ToastContainer />
       </>
     )
   }

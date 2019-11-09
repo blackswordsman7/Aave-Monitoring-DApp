@@ -23,7 +23,8 @@ import {
   Container,
   Row,
   Col,
-  Tooltip
+  Tooltip,
+  Spinner
 } from 'reactstrap'
 
 // Components
@@ -50,7 +51,7 @@ class Home extends React.Component<DefaultProps> {
   }
 
   render() {
-    const { tokenReserves, usersCount } = this.props.apiState
+    const { isLoadingReserves, tokenReserves, usersCount } = this.props.apiState
 
     return (
       <>
@@ -80,60 +81,66 @@ class Home extends React.Component<DefaultProps> {
                     </tr>
                   </thead>
                   <tbody>
-                    {tokenReserves.map(tr => (
-                      <tr key={tr.symbol}>
-                        <td>
-                          <Token size={30} token={tr.symbol} />
-                          <span className="ml-3">{tr.name}</span>
-                        </td>
-                        <td>{usersCount[tr.name]}</td>
-                        <td>
-                          <span id={`${tr.symbol.toLowerCase()}Tooltip`}>
-                            {new Intl.NumberFormat('en-US', {
-                              style: 'currency',
-                              currency: 'USD',
-                              currencyDisplay: 'name'
-                            })
-                              .format(parseFloat(tr.availableLiquidity))
-                              .replace('US dollars', tr.symbol)}
-                          </span>
-                          <Tooltip
-                            placement="top"
-                            isOpen={
-                              this.state[`${tr.symbol.toLowerCase()}Tooltip`]
-                            }
-                            target={`${tr.symbol.toLowerCase()}Tooltip`}
-                            toggle={() =>
-                              this.toggle(`${tr.symbol.toLowerCase()}Tooltip`)
-                            }
-                          >
-                            {new Intl.NumberFormat('en-US', {
-                              style: 'currency',
-                              currency: 'ETH',
-                              currencyDisplay: 'name'
-                            }).format(
-                              parseFloat(tr.availableLiquidity) *
-                                parseFloat(tr.priceInEth)
-                            )}
-                          </Tooltip>
-                        </td>
-                        <td>
-                          {`${(parseFloat(tr.liquidityRate) * 100).toFixed(
-                            2
-                          )} %`}
-                        </td>
-                        <td>
-                          {`${(parseFloat(tr.fixedBorrowRate) * 100).toFixed(
-                            2
-                          )} %`}
-                        </td>
-                        <td>
-                          {`${(parseFloat(tr.variableBorrowRate) * 100).toFixed(
-                            2
-                          )} %`}
-                        </td>
-                      </tr>
-                    ))}
+                    {isLoadingReserves ? (
+                      <td colSpan={12} className="text-center mt-5 mb-5">
+                        <Spinner color="primary" />
+                      </td>
+                    ) : (
+                      tokenReserves.map(tr => (
+                        <tr key={tr.symbol}>
+                          <td>
+                            <Token size={30} token={tr.symbol} />
+                            <span className="ml-3">{tr.name}</span>
+                          </td>
+                          <td>{usersCount[tr.name]}</td>
+                          <td>
+                            <span id={`${tr.symbol.toLowerCase()}Tooltip`}>
+                              {new Intl.NumberFormat('en-US', {
+                                style: 'currency',
+                                currency: 'USD',
+                                currencyDisplay: 'name'
+                              })
+                                .format(parseFloat(tr.availableLiquidity))
+                                .replace('US dollars', tr.symbol)}
+                            </span>
+                            <Tooltip
+                              placement="top"
+                              isOpen={
+                                this.state[`${tr.symbol.toLowerCase()}Tooltip`]
+                              }
+                              target={`${tr.symbol.toLowerCase()}Tooltip`}
+                              toggle={() =>
+                                this.toggle(`${tr.symbol.toLowerCase()}Tooltip`)
+                              }
+                            >
+                              {new Intl.NumberFormat('en-US', {
+                                style: 'currency',
+                                currency: 'ETH',
+                                currencyDisplay: 'name'
+                              }).format(
+                                parseFloat(tr.availableLiquidity) *
+                                  parseFloat(tr.priceInEth)
+                              )}
+                            </Tooltip>
+                          </td>
+                          <td>
+                            {`${(parseFloat(tr.liquidityRate) * 100).toFixed(
+                              2
+                            )} %`}
+                          </td>
+                          <td>
+                            {`${(parseFloat(tr.fixedBorrowRate) * 100).toFixed(
+                              2
+                            )} %`}
+                          </td>
+                          <td>
+                            {`${(
+                              parseFloat(tr.variableBorrowRate) * 100
+                            ).toFixed(2)} %`}
+                          </td>
+                        </tr>
+                      ))
+                    )}
                   </tbody>
                 </Table>
               </Card>

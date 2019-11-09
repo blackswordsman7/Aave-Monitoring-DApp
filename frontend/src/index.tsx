@@ -27,6 +27,7 @@ import { Provider as ReduxProvider } from 'react-redux'
 import 'assets/vendor/nucleo/css/nucleo.css'
 import 'assets/vendor/@fortawesome/fontawesome-free/css/all.min.css'
 import 'assets/scss/app.scss'
+import 'react-toastify/dist/ReactToastify.min.css'
 
 import App from './views/App'
 

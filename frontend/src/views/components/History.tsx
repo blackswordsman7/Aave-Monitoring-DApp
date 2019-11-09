@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card, CardHeader, Container, Row, Col } from 'reactstrap'
+import { Card, CardHeader, Container, Row, Col, Spinner } from 'reactstrap'
 import BootstrapTable from 'react-bootstrap-table-next'
 import paginationFactory from 'react-bootstrap-table2-paginator'
 import Select, {
@@ -114,7 +114,7 @@ class History extends React.Component<DefaultProps> {
   }
 
   render() {
-    const { tokens } = this.props.apiState
+    const { isLoadingHistory, tokens } = this.props.apiState
     const { history } = this.state
 
     const tokenOptions: Array<OptionTypeBase> = []
@@ -163,24 +163,30 @@ class History extends React.Component<DefaultProps> {
                     </Col>
                   </Row>
                 </CardHeader>
-                <BootstrapTable
-                  keyField="id"
-                  data={history}
-                  columns={userHistoryColumns}
-                  defaultSorted={defaultSortedUserHistory}
-                  bordered={false}
-                  pagination={paginationFactory({
-                    alwaysShowAllBtns: true,
-                    hideSizePerPage: true,
-                    paginationSize: 3,
-                    sizePerPage: 10
-                  })}
-                  bootstrap4={true}
-                  classes="align-items-center table-flush"
-                  wrapperClasses="table-responsive"
-                  noDataIndication="Looks like there's no data on the applied filters!"
-                  hover
-                />
+                {isLoadingHistory ? (
+                  <Col className="text-center mt-5 mb-5">
+                    <Spinner color="primary" />
+                  </Col>
+                ) : (
+                  <BootstrapTable
+                    keyField="id"
+                    data={history}
+                    columns={userHistoryColumns}
+                    defaultSorted={defaultSortedUserHistory}
+                    bordered={false}
+                    pagination={paginationFactory({
+                      alwaysShowAllBtns: true,
+                      hideSizePerPage: true,
+                      paginationSize: 3,
+                      sizePerPage: 10
+                    })}
+                    bootstrap4={true}
+                    classes="align-items-center table-flush"
+                    wrapperClasses="table-responsive"
+                    noDataIndication="Looks like there's no data on the applied filters!"
+                    hover
+                  />
+                )}
               </Card>
             </Col>
           </Row>

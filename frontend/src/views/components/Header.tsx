@@ -17,6 +17,7 @@
 */
 import React from 'react'
 import { connect } from 'react-redux'
+import CountUp from 'react-countup'
 import {
   Card,
   CardBody,
@@ -54,6 +55,10 @@ class Header extends React.Component<HeaderProps> {
       0
     )
 
+    const flashloanCount = userHistory.filter(
+      uh => uh.event_name === 'Flashloan'
+    ).length
+
     const volume = tokenReserves
       .map(tr => parseFloat(tr.totalLiquidity) * parseFloat(tr.priceInEth))
       .reduce((a, b) => a + b, 0)
@@ -73,14 +78,14 @@ class Header extends React.Component<HeaderProps> {
                             tag="h5"
                             className="text-uppercase text-muted mb-0"
                           >
-                            Traffic
+                            Transactions
                           </CardTitle>
                           <span className="h2 font-weight-bold mb-0">
-                            {userHistory.length}
+                            <CountUp end={userHistory.length} />
                           </span>
                         </div>
                         <Col className="col-auto">
-                          <div className="icon icon-shape bg-danger text-white rounded-circle shadow">
+                          <div className="icon icon-shape bg-default text-white rounded-circle shadow">
                             <i className="fas fa-chart-bar" />
                           </div>
                         </Col>
@@ -100,11 +105,11 @@ class Header extends React.Component<HeaderProps> {
                             Users
                           </CardTitle>
                           <span className="h2 font-weight-bold mb-0">
-                            {totalUsersCount}
+                            <CountUp end={totalUsersCount} />
                           </span>
                         </div>
                         <Col className="col-auto">
-                          <div className="icon icon-shape bg-warning text-white rounded-circle shadow">
+                          <div className="icon icon-shape bg-green text-white rounded-circle shadow">
                             <i className="fas fa-users" />
                           </div>
                         </Col>
@@ -163,15 +168,15 @@ class Header extends React.Component<HeaderProps> {
                             tag="h5"
                             className="text-uppercase text-muted mb-0"
                           >
-                            Performance
+                            Flashloans
                           </CardTitle>
                           <span className="h2 font-weight-bold mb-0">
-                            49,65%
+                            <CountUp end={flashloanCount} />
                           </span>
                         </div>
                         <Col className="col-auto">
-                          <div className="icon icon-shape bg-info text-white rounded-circle shadow">
-                            <i className="fas fa-percent" />
+                          <div className="icon icon-shape bg-danger text-white rounded-circle shadow">
+                            <i className="ni ni-spaceship" />
                           </div>
                         </Col>
                       </Row>

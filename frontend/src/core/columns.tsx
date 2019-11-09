@@ -1,5 +1,7 @@
 import React from 'react'
 import moment from 'moment'
+import { CopyToClipboard } from 'react-copy-to-clipboard'
+import { toast } from 'react-toastify'
 
 // Components
 import EventBadge from '../views/components/EventBadge'
@@ -9,11 +11,21 @@ import Token from '../views/components/Token'
 // Utils
 import { parseAmount, shortAddress } from './utils'
 
+const _onClickCopy = () =>
+  toast.success('Copied to clipboard successfully', {
+    position: toast.POSITION.TOP_RIGHT
+  })
+
 const formatUser = (address: string) => {
   return (
     <React.Fragment>
       <Identicon address={address} size={30} />
-      <span className="ml-2">{shortAddress(address)}</span>
+      <span className="ml-2">{shortAddress(address, 10)}</span>
+      <CopyToClipboard text={address} onCopy={_onClickCopy}>
+        <span className="ml-2 cursor-pointer">
+          <i className="fas fa-copy" />
+        </span>
+      </CopyToClipboard>
     </React.Fragment>
   )
 }
@@ -64,7 +76,8 @@ export const userHistoryColumns = [
     dataField: 'address',
     text: 'User',
     sort: false,
-    formatter: cell => formatUser(cell)
+    formatter: cell => formatUser(cell),
+    title: true
   },
   {
     dataField: 'amount',
@@ -72,13 +85,32 @@ export const userHistoryColumns = [
     sort: false,
     // eslint-disable-next-line react/display-name
     formatter: (cell, row) => {
+      const amount = cell ? parseFloat(parseAmount(cell, 18)) : 0
+
       return (
-        <React.Fragment>
+        <>
           <Token size={24} token={row.token.symbol} />
-          <span className="ml-2">{parseAmount(cell, 18)}</span>
-          <span className="ml-2">{row.token.symbol}</span>
-        </React.Fragment>
+          <span className="ml-2">
+            {new Intl.NumberFormat('en-US', {
+              style: 'currency',
+              currency: 'USD',
+              currencyDisplay: 'name'
+            })
+              .format(amount)
+              .replace('US dollars', row.token.symbol)}
+          </span>
+        </>
       )
+    },
+    // eslint-disable-next-line react/display-name
+    title: (cell, row) => {
+      const amount = cell ? parseFloat(parseAmount(cell, 18)) : 0
+
+      return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'ETH',
+        currencyDisplay: 'name'
+      }).format(amount * parseFloat(row.token.priceInEth))
     }
   },
   {

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card, CardHeader, Container, Row, Col } from 'reactstrap'
+import { Card, CardHeader, Container, Row, Col, Spinner } from 'reactstrap'
 import BootstrapTable from 'react-bootstrap-table-next'
 import paginationFactory from 'react-bootstrap-table2-paginator'
 
@@ -11,7 +11,7 @@ import { userHealthColumns } from '../../core/columns'
 
 class History extends React.Component<DefaultProps> {
   render() {
-    const { userHealth } = this.props.apiState
+    const { isLoadingHealth, userHealth } = this.props.apiState
 
     return (
       <>
@@ -26,22 +26,28 @@ class History extends React.Component<DefaultProps> {
                     </div>
                   </Row>
                 </CardHeader>
-                <BootstrapTable
-                  keyField="address"
-                  data={userHealth}
-                  columns={userHealthColumns}
-                  bordered={false}
-                  pagination={paginationFactory({
-                    alwaysShowAllBtns: true,
-                    hideSizePerPage: true,
-                    paginationSize: 3,
-                    sizePerPage: 10
-                  })}
-                  bootstrap4={true}
-                  classes="align-items-center table-flush"
-                  wrapperClasses="table-responsive"
-                  hover
-                />
+                {isLoadingHealth ? (
+                  <Col className="text-center mt-5 mb-5">
+                    <Spinner color="primary" />
+                  </Col>
+                ) : (
+                  <BootstrapTable
+                    keyField="address"
+                    data={userHealth}
+                    columns={userHealthColumns}
+                    bordered={false}
+                    pagination={paginationFactory({
+                      alwaysShowAllBtns: true,
+                      hideSizePerPage: true,
+                      paginationSize: 3,
+                      sizePerPage: 10
+                    })}
+                    bootstrap4={true}
+                    classes="align-items-center table-flush"
+                    wrapperClasses="table-responsive"
+                    hover
+                  />
+                )}
               </Card>
             </Col>
           </Row>

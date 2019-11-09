@@ -11,7 +11,11 @@ import {
 export type ApiState = DeepReadonly<{
   error: Error | null
   ethPrice: number
-  loading: boolean
+  isLoadingCount: boolean
+  isLoadingHealth: boolean
+  isLoadingHistory: boolean
+  isLoadingPrice: boolean
+  isLoadingReserves: boolean
   tokens: string[]
   tokenReserves: TokenReserve[]
   usersCount: UsersCount

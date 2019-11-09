@@ -23,21 +23,32 @@ const routes = [
     exact: true,
     name: 'Overview',
     icon: 'ni ni-tv-2 text-primary',
-    component: Containers.HomeContainer
+    component: Containers.HomeContainer,
+    type: 'common'
   },
   {
     path: '/health',
     exact: false,
     name: 'Health',
     icon: 'ni ni-planet text-blue',
-    component: Containers.HealthContainer
+    component: Containers.HealthContainer,
+    type: 'common'
   },
   {
     path: '/history',
     exact: false,
     name: 'History',
     icon: 'ni ni-watch-time text-green',
-    component: Containers.HistoryContainer
+    component: Containers.HistoryContainer,
+    type: 'common'
+  },
+  {
+    path: '/dashboard',
+    exact: false,
+    name: 'Dashboard',
+    icon: 'ni ni-watch-time text-green',
+    component: Containers.DashboardContainer,
+    type: 'user'
   }
 ]
 
