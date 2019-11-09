@@ -64,7 +64,7 @@ class App extends React.Component<AppProps> {
 
     return (
       <>
-        <Sidebar address={address} routes={routes} />
+        <Sidebar routes={routes} />
         <div className="main-content">
           <Navbar
             address={address}
@@ -89,12 +89,9 @@ class App extends React.Component<AppProps> {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  {
-    getEthPrice: apiActions.getEthPrice,
-    getUsersCount: apiActions.getUsersCount,
-    getUserHealth: apiActions.getUserHealth,
-    initWeb3: web3Actions.initWeb3
-  }
-)(App)
+export default connect(mapStateToProps, {
+  getEthPrice: apiActions.getEthPrice,
+  getUsersCount: apiActions.getUsersCount,
+  getUserHealth: apiActions.getUserHealth,
+  initWeb3: web3Actions.initWeb3
+})(App)

@@ -31,7 +31,6 @@ import {
 } from 'reactstrap'
 
 type Props = {
-  address: string
   routes: Array<object>
 }
 
@@ -81,7 +80,7 @@ class Sidebar extends React.Component<Props> {
   }
 
   render() {
-    const { address, routes } = this.props
+    const { routes } = this.props
 
     return (
       <Navbar
@@ -135,13 +134,8 @@ class Sidebar extends React.Component<Props> {
             </div>
 
             <Nav navbar>{this.createLinks(routes, 'common')}</Nav>
-
-            {address && (
-              <>
-                <hr className="my-3" />
-                <Nav navbar>{this.createLinks(routes, 'user')}</Nav>
-              </>
-            )}
+            <hr className="my-3" />
+            <Nav navbar>{this.createLinks(routes, 'user')}</Nav>
           </Collapse>
         </Container>
       </Navbar>

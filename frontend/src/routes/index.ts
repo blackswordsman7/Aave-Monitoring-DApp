@@ -22,7 +22,7 @@ const routes = [
     path: '/',
     exact: true,
     name: 'Overview',
-    icon: 'ni ni-tv-2 text-primary',
+    icon: 'ni ni-app text-primary',
     component: Containers.HomeContainer,
     type: 'common'
   },
@@ -30,7 +30,7 @@ const routes = [
     path: '/health',
     exact: false,
     name: 'Health',
-    icon: 'ni ni-planet text-blue',
+    icon: 'ni ni-planet text-green',
     component: Containers.HealthContainer,
     type: 'common'
   },
@@ -38,7 +38,7 @@ const routes = [
     path: '/history',
     exact: false,
     name: 'History',
-    icon: 'ni ni-watch-time text-green',
+    icon: 'ni ni-watch-time text-yellow',
     component: Containers.HistoryContainer,
     type: 'common'
   },
@@ -46,7 +46,7 @@ const routes = [
     path: '/dashboard',
     exact: false,
     name: 'Dashboard',
-    icon: 'ni ni-watch-time text-green',
+    icon: 'ni ni-tv-2 text-red',
     component: Containers.DashboardContainer,
     type: 'user'
   }
