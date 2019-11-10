@@ -94,39 +94,6 @@ def health():
             json_data.append(dict(zip(row_headers,result)))
         return json.dumps(json_data, indent=4, sort_keys=True)
 
-@app.route("/roles")
-def roles():
-    connection = psycopg2.connect(user = DB_USER,
-                                  password = DB_PASS,
-                                  host= DB_HOST,
-                                  database = DB_NAME)
-    cursor = connection.cursor()
-    json_data=[]
-    
-    calc_time = int(( datetime.datetime.fromtimestamp(time.time()) - datetime.timedelta(days=7) ).timestamp())
-
-    sql="select * from history where timestamp > %s"
-    cursor.execute(sql, [calc_time])
-    history = cursor.fetchall()
-    cursor.execute(" select address, totalcollateral, healthfactor from health")
-    health_rec = cursor.fetchall()
-    for i in health_rec:
-        dict_user={}
-        roles=[]
-        if  ((int(i[1]))/10**18) > 50:
-            roles.append('Whale')
-        if int(i[2])/10**18 < 1.5:
-            roles.append('Risky')
-        count = len([ x for x in history if x[0] == i[0]])
-        if int(count) > 10:
-            roles.append('Active')
-        dict_user['address'] = i[0]
-        dict_user['roles'] = roles
-        if len(roles) != 0:
-            json_data.append(dict_user)
-        else:
-            pass
-    return json.dumps(json_data, indent=4, sort_keys=True)
 
 @app.route("/history/")                   # at the end point /
 def history():
