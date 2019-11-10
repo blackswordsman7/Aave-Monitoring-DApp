@@ -106,7 +106,7 @@ class UserHeader extends React.Component<UserHeaderProps> {
                         </div>
                         <Col className="col-auto">
                           <div className="icon icon-shape bg-default text-white rounded-circle shadow">
-                            <i className="fas fa-chart-bar" />
+                            <i className="fas fa-coins" />
                           </div>
                         </Col>
                       </Row>

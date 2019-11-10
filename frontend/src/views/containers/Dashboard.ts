@@ -11,5 +11,6 @@ const mapStateToProps = (state: RootState) => {
 }
 
 export default connect(mapStateToProps, {
-  getUserHealth: userActions.getUserHealth
+  getUserHealth: userActions.getUserHealth,
+  getUserReserves: userActions.getUserReserves
 })(Dashboard as any)

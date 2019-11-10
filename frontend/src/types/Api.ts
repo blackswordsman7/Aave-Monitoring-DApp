@@ -52,4 +52,19 @@ export interface UserHistory {
   target: string
   timestamp: number
   token?: TokenReserve
+  txhash: string
+}
+
+export interface UserReserve {
+  reserve: string
+  currentATokenBalance: number
+  currentUnderlyingBalance: number
+  currentBorrowBalance: number
+  principalBorrowBalance: number
+  borrowRateMode: number
+  borrowRate: number
+  liquidityRate: number
+  originationFee: number
+  variableBorrowIndex: number
+  lastUpdateTimestamp: number
 }

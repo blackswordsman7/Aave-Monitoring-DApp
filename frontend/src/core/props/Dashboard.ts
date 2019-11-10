@@ -9,4 +9,5 @@ export interface DashboardProps extends RouterState {
   userState: UserState
   web3State: Web3State
   getUserHealth: (address: string) => {}
+  getUserReserves: (address: string) => {}
 }

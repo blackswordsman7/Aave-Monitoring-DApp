@@ -16,13 +16,22 @@
 
 */
 import React from 'react'
-import { Card, CardHeader, Container, Row, Col, CardBody } from 'reactstrap'
+import {
+  Card,
+  CardHeader,
+  Container,
+  Row,
+  Col,
+  CardBody,
+  Spinner
+} from 'reactstrap'
 
 // Components
 import Balance from './Balance'
 
 // Types
 import { DashboardProps } from '../../core/props'
+import { TokenReserve } from '../../types'
 
 class Dashboard extends React.Component<DashboardProps> {
   state = {}
@@ -32,6 +41,7 @@ class Dashboard extends React.Component<DashboardProps> {
 
     if (address) {
       this.props.getUserHealth(address)
+      this.props.getUserReserves(address)
     }
   }
 
@@ -40,11 +50,17 @@ class Dashboard extends React.Component<DashboardProps> {
 
     if (address && address !== prevProps.web3State.accounts[0]) {
       this.props.getUserHealth(address)
+      this.props.getUserReserves(address)
     }
   }
 
   render() {
-    const { tokens } = this.props.apiState
+    const { tokenReserves } = this.props.apiState
+    const { isLoadingReserves, reserves } = this.props.userState
+
+    const collateralReserves = reserves.filter(
+      r => r.currentUnderlyingBalance > 0
+    )
 
     return (
       <>
@@ -60,11 +76,27 @@ class Dashboard extends React.Component<DashboardProps> {
                   </Row>
                 </CardHeader>
                 <CardBody className="pl-5 pr-5">
-                  <Row>
-                    {tokens.map(token => {
-                      return <Balance key={token} token={token} />
-                    })}
-                  </Row>
+                  {isLoadingReserves ? (
+                    <Col className="text-center mt-5 mb-5">
+                      <Spinner color="primary" />
+                    </Col>
+                  ) : (
+                    <Row>
+                      {collateralReserves.length === 0 ? (
+                        <Col className="text-center pb-5">
+                          {`Looks like you don't have balances in any of the reserves`}
+                        </Col>
+                      ) : (
+                        collateralReserves.map(r => (
+                          <Balance
+                            key={r.reserve}
+                            reserve={r}
+                            tokenReserves={tokenReserves as TokenReserve[]}
+                          />
+                        ))
+                      )}
+                    </Row>
+                  )}
                 </CardBody>
               </Card>
             </Col>

@@ -1,17 +1,22 @@
 import { ActionType } from 'typesafe-actions'
 
 import {
-  userActions,
-  UserState,
   GET_USER_HEALTH,
   GET_USER_HEALTH_ERROR,
-  GET_USER_HEALTH_SUCCESS
+  GET_USER_HEALTH_SUCCESS,
+  GET_USER_RESERVES,
+  GET_USER_RESERVES_ERROR,
+  GET_USER_RESERVES_SUCCESS,
+  userActions,
+  UserState
 } from './'
 
 const iUS: UserState = {
   error: null,
   health: undefined,
-  isLoadingHealth: false
+  isLoadingHealth: false,
+  isLoadingReserves: false,
+  reserves: []
 }
 
 type Actions = ActionType<typeof userActions>
@@ -37,6 +42,24 @@ export const userReducer = (
         ...state,
         error: action.payload,
         isLoadingHealth: false
+      }
+
+    case GET_USER_RESERVES:
+      return { ...state, error: null, isLoadingReserves: true }
+
+    case GET_USER_RESERVES_SUCCESS:
+      return {
+        ...state,
+        error: null,
+        isLoadingReserves: false,
+        reserves: action.payload
+      }
+
+    case GET_USER_RESERVES_ERROR:
+      return {
+        ...state,
+        error: action.payload,
+        isLoadingReserves: false
       }
 
     default:

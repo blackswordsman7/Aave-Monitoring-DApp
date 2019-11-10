@@ -24,7 +24,7 @@ const formatUser = (address: string) => {
       <span className="ml-2">{shortAddress(address, 10)}</span>
       <CopyToClipboard text={address} onCopy={_onClickCopy}>
         <span className="ml-2 cursor-pointer">
-          <i className="fas fa-copy" />
+          <i className="far fa-copy" />
         </span>
       </CopyToClipboard>
     </React.Fragment>
@@ -139,5 +139,21 @@ export const userHistoryColumns = [
     // eslint-disable-next-line react/display-name
     formatter: cell => moment.unix(cell).fromNow(),
     sortFunc: sortDateFunc
+  },
+  {
+    dataField: 'txhash',
+    text: 'Transaction',
+    sort: false,
+    // eslint-disable-next-line react/display-name
+    formatter: cell => (
+      <a
+        href={`https://kovan.etherscan.io/tx/${cell}`}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        {shortAddress(cell, 10)}
+        <i className="fas fa-external-link-alt ml-1" />
+      </a>
+    )
   }
 ]

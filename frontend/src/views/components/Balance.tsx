@@ -4,18 +4,30 @@ import { Card, CardBody, CardHeader, Col, Row } from 'reactstrap'
 // Components
 import Token from './Token'
 
+// Types
+import { TokenReserve, UserReserve } from '../../types'
+import { getTokenDetails } from '../../core/utils'
+
 interface Props {
-  token: string
+  reserve: UserReserve
+  tokenReserves: TokenReserve[]
 }
 
 const Balance = (props: Props) => {
+  const { reserve, tokenReserves } = props
+  const token = getTokenDetails(
+    reserve.reserve,
+    tokenReserves,
+    'symbol'
+  ) as TokenReserve
+
   return (
     <Col className="pb-5 balance" lg={6} xl={4}>
       <Card className="shadow">
         <CardHeader>
           <Row className="align-items-center">
             <Col>
-              <Token size={30} token={props.token} />
+              <Token size={30} token={token.symbol} />
               <span className="ml-2 font-weight-bold">$0.00</span>
             </Col>
           </Row>

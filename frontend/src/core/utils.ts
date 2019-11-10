@@ -74,13 +74,15 @@ export const shortAddress = (address, length = 4, showEnd = true) => {
 
 /**
  * gets token symbol from the address
- * @param {string} address
+ * @param {string} value
  * @param {array} tokens reserves
+ * @param {string} key
  * @return {object}
  */
 export const getTokenDetails = (
-  address: string,
-  tokens: DeepReadonly<TokenReserve[]>
+  value: string,
+  tokens: DeepReadonly<TokenReserve[]>,
+  key = 'address'
 ): TokenReserve | undefined => {
-  return tokens.find(token => token.address === address)
+  return tokens.find(token => token[key] === value)
 }
