@@ -7,7 +7,4 @@ const mapStateToProps = (state: RootState) => {
   return { ...state }
 }
 
-export default connect(
-  mapStateToProps,
-  {}
-)(History)
+export default connect(mapStateToProps, {})(History as any)

@@ -17,7 +17,6 @@
 */
 import React from 'react'
 import { connect } from 'react-redux'
-import CountUp from 'react-countup'
 import {
   Card,
   CardBody,
@@ -29,39 +28,62 @@ import {
 } from 'reactstrap'
 
 // Types
-import { HeaderProps } from '../../core/props'
+import { UserHeaderProps } from '../../core/props'
 import { RootState } from '../../redux/store'
 
-class Header extends React.Component<HeaderProps> {
-  state = {
-    showVolumeTooltip: false
+// Utils
+import { parseAmount } from '../../core/utils'
+
+class UserHeader extends React.Component<UserHeaderProps> {
+  state = {}
+
+  toggle = targetName => {
+    if (!this.state[targetName]) {
+      this.setState({
+        ...this.state,
+        [targetName]: true
+      })
+    } else {
+      this.setState({
+        ...this.state,
+        [targetName]: !this.state[targetName]
+      })
+    }
   }
 
-  toggle = () => {
-    this.setState({ showVolumeTooltip: !this.state.showVolumeTooltip })
+  renderCard = (amount, targetName) => {
+    const { ethPrice } = this.props.apiState
+
+    return (
+      <>
+        <span className="h2 font-weight-bold mb-0" id={targetName}>
+          {new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'ETH',
+            currencyDisplay: 'name'
+          }).format(parseFloat(amount))}
+        </span>
+        <Tooltip
+          placement="top"
+          isOpen={this.state[targetName]}
+          target={targetName}
+          toggle={() => this.toggle(targetName)}
+        >
+          {new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'USD'
+          }).format(parseFloat(amount) * ethPrice)}
+        </Tooltip>
+      </>
+    )
   }
 
   render() {
-    const {
-      ethPrice,
-      tokenReserves,
-      userHistory,
-      usersCount
-    } = this.props.apiState
-    const { showVolumeTooltip } = this.state
+    const { health } = this.props.userState
 
-    const totalUsersCount = Object.keys(usersCount).reduce(
-      (sum, key) => sum + (usersCount[key] || 0),
-      0
-    )
-
-    const flashloanCount = userHistory.filter(
-      uh => uh.event_name === 'Flashloan'
-    ).length
-
-    const volume = tokenReserves
-      .map(tr => parseFloat(tr.totalLiquidity) * parseFloat(tr.priceInEth))
-      .reduce((a, b) => a + b, 0)
+    const borrow = parseAmount(health ? health.totalborrowseth : '0', 18)
+    const collateral = parseAmount(health ? health.totalcollateral : '0', 18)
+    const liquidity = parseAmount(health ? health.totliquidityeth : '0', 18)
 
     return (
       <>
@@ -69,7 +91,7 @@ class Header extends React.Component<HeaderProps> {
           <Container fluid>
             <div className="header-body">
               <Row>
-                <Col lg="6" xl="3">
+                <Col lg="4" xl="4">
                   <Card className="card-stats mb-4 mb-xl-0">
                     <CardBody>
                       <Row>
@@ -78,11 +100,9 @@ class Header extends React.Component<HeaderProps> {
                             tag="h5"
                             className="text-uppercase text-muted mb-0"
                           >
-                            Transactions
+                            Total Collateral
                           </CardTitle>
-                          <span className="h2 font-weight-bold mb-0">
-                            <CountUp end={userHistory.length} />
-                          </span>
+                          {this.renderCard(collateral, 'collateralTooltip')}
                         </div>
                         <Col className="col-auto">
                           <div className="icon icon-shape bg-default text-white rounded-circle shadow">
@@ -93,7 +113,7 @@ class Header extends React.Component<HeaderProps> {
                     </CardBody>
                   </Card>
                 </Col>
-                <Col lg="6" xl="3">
+                <Col lg="4" xl="4">
                   <Card className="card-stats mb-4 mb-xl-0">
                     <CardBody>
                       <Row>
@@ -102,11 +122,9 @@ class Header extends React.Component<HeaderProps> {
                             tag="h5"
                             className="text-uppercase text-muted mb-0"
                           >
-                            Users
+                            Liquidity
                           </CardTitle>
-                          <span className="h2 font-weight-bold mb-0">
-                            <CountUp end={totalUsersCount} />
-                          </span>
+                          {this.renderCard(liquidity, 'liquidityTooltip')}
                         </div>
                         <Col className="col-auto">
                           <div className="icon icon-shape bg-green text-white rounded-circle shadow">
@@ -117,7 +135,7 @@ class Header extends React.Component<HeaderProps> {
                     </CardBody>
                   </Card>
                 </Col>
-                <Col lg="6" xl="3">
+                <Col lg="4" xl="4">
                   <Card className="card-stats mb-4 mb-xl-0">
                     <CardBody>
                       <Row>
@@ -126,57 +144,13 @@ class Header extends React.Component<HeaderProps> {
                             tag="h5"
                             className="text-uppercase text-muted mb-0"
                           >
-                            Volume
+                            Borrow
                           </CardTitle>
-                          <span
-                            className="h2 font-weight-bold mb-0"
-                            id="VolumeTooltip"
-                          >
-                            {new Intl.NumberFormat('en-US', {
-                              style: 'currency',
-                              currency: 'ETH',
-                              currencyDisplay: 'name'
-                            }).format(volume)}
-                          </span>
-                          <Tooltip
-                            placement="top"
-                            isOpen={showVolumeTooltip}
-                            target="VolumeTooltip"
-                            toggle={this.toggle}
-                          >
-                            {new Intl.NumberFormat('en-US', {
-                              style: 'currency',
-                              currency: 'USD'
-                            }).format(volume * ethPrice)}
-                          </Tooltip>
+                          {this.renderCard(borrow, 'borrowTooltip')}
                         </div>
                         <Col className="col-auto">
                           <div className="icon icon-shape bg-yellow text-white rounded-circle shadow">
                             <i className="ni ni-money-coins" />
-                          </div>
-                        </Col>
-                      </Row>
-                    </CardBody>
-                  </Card>
-                </Col>
-                <Col lg="6" xl="3">
-                  <Card className="card-stats mb-4 mb-xl-0">
-                    <CardBody>
-                      <Row>
-                        <div className="col">
-                          <CardTitle
-                            tag="h5"
-                            className="text-uppercase text-muted mb-0"
-                          >
-                            Flashloans
-                          </CardTitle>
-                          <span className="h2 font-weight-bold mb-0">
-                            <CountUp end={flashloanCount} />
-                          </span>
-                        </div>
-                        <Col className="col-auto">
-                          <div className="icon icon-shape bg-danger text-white rounded-circle shadow">
-                            <i className="ni ni-spaceship" />
                           </div>
                         </Col>
                       </Row>
@@ -196,4 +170,4 @@ const mapStateToProps = (state: RootState) => {
   return { ...state }
 }
 
-export default connect(mapStateToProps, {})(Header)
+export default connect(mapStateToProps, {})(UserHeader)

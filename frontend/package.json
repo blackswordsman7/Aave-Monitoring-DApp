@@ -86,7 +86,7 @@
     "./src/**/*.{ts,tsx}": [
       "yarn run prettier:ts",
       "yarn run lint",
-      "git add"
+      "git add ."
     ]
   },
   "husky": {

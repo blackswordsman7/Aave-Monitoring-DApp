@@ -16,41 +16,35 @@
 
 */
 import React from 'react'
-import {
-  Card,
-  CardHeader,
-  Table,
-  Container,
-  Row,
-  Col,
-  Tooltip
-} from 'reactstrap'
+import { Card, CardHeader, Container, Row, Col, CardBody } from 'reactstrap'
 
 // Components
-import Token from './Token'
+import Balance from './Balance'
 
 // Types
-import { DefaultProps } from '../../core/props'
+import { DashboardProps } from '../../core/props'
 
-class Dashboard extends React.Component<DefaultProps> {
+class Dashboard extends React.Component<DashboardProps> {
   state = {}
 
-  toggle = targetName => {
-    if (!this.state[targetName]) {
-      this.setState({
-        ...this.state,
-        [targetName]: true
-      })
-    } else {
-      this.setState({
-        ...this.state,
-        [targetName]: !this.state[targetName]
-      })
+  componentDidMount() {
+    const address = this.props.web3State.accounts[0]
+
+    if (address) {
+      this.props.getUserHealth(address)
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    const address = this.props.web3State.accounts[0]
+
+    if (address && address !== prevProps.web3State.accounts[0]) {
+      this.props.getUserHealth(address)
     }
   }
 
   render() {
-    const { tokenReserves, usersCount } = this.props.apiState
+    const { tokens } = this.props.apiState
 
     return (
       <>
@@ -61,81 +55,17 @@ class Dashboard extends React.Component<DefaultProps> {
                 <CardHeader className="border-0">
                   <Row className="align-items-center">
                     <div className="col">
-                      <h3 className="mb-0">Protocol Overview</h3>
+                      <h3 className="mb-0">Balances</h3>
                     </div>
                   </Row>
                 </CardHeader>
-                <Table
-                  className="align-items-center table-flush table-hover"
-                  responsive
-                >
-                  <thead className="thead-light">
-                    <tr>
-                      <th scope="col">Assets</th>
-                      <th scope="col">Users</th>
-                      <th scope="col">Liquidity Available</th>
-                      <th scope="col">Deposit APR</th>
-                      <th scope="col">Stable Borrow APR</th>
-                      <th scope="col">Variable Borrow APR</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {tokenReserves.map(tr => (
-                      <tr key={tr.symbol}>
-                        <td>
-                          <Token size={30} token={tr.symbol} />
-                          <span className="ml-3">{tr.name}</span>
-                        </td>
-                        <td>{usersCount[tr.name]}</td>
-                        <td>
-                          <span id={`${tr.symbol.toLowerCase()}Tooltip`}>
-                            {new Intl.NumberFormat('en-US', {
-                              style: 'currency',
-                              currency: 'USD',
-                              currencyDisplay: 'name'
-                            })
-                              .format(parseFloat(tr.availableLiquidity))
-                              .replace('US dollars', tr.symbol)}
-                          </span>
-                          <Tooltip
-                            placement="top"
-                            isOpen={
-                              this.state[`${tr.symbol.toLowerCase()}Tooltip`]
-                            }
-                            target={`${tr.symbol.toLowerCase()}Tooltip`}
-                            toggle={() =>
-                              this.toggle(`${tr.symbol.toLowerCase()}Tooltip`)
-                            }
-                          >
-                            {new Intl.NumberFormat('en-US', {
-                              style: 'currency',
-                              currency: 'ETH',
-                              currencyDisplay: 'name'
-                            }).format(
-                              parseFloat(tr.availableLiquidity) *
-                                parseFloat(tr.priceInEth)
-                            )}
-                          </Tooltip>
-                        </td>
-                        <td>
-                          {`${(parseFloat(tr.liquidityRate) * 100).toFixed(
-                            2
-                          )} %`}
-                        </td>
-                        <td>
-                          {`${(parseFloat(tr.fixedBorrowRate) * 100).toFixed(
-                            2
-                          )} %`}
-                        </td>
-                        <td>
-                          {`${(parseFloat(tr.variableBorrowRate) * 100).toFixed(
-                            2
-                          )} %`}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </Table>
+                <CardBody className="pl-5 pr-5">
+                  <Row>
+                    {tokens.map(token => {
+                      return <Balance key={token} token={token} />
+                    })}
+                  </Row>
+                </CardBody>
               </Card>
             </Col>
           </Row>

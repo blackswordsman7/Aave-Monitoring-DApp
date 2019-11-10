@@ -19,7 +19,6 @@ import React from 'react'
 import { NavLink as NavLinkRRD, Link } from 'react-router-dom'
 import {
   Collapse,
-  Media,
   NavbarBrand,
   Navbar,
   NavItem,
@@ -97,24 +96,15 @@ class Sidebar extends React.Component<Props> {
             <span className="navbar-toggler-icon" />
           </button>
 
-          <NavbarBrand className="pt-0" to="/" tag={Link}>
+          <NavbarBrand className="pt-0 ml--5" to="/" tag={Link}>
             Aave Monitoring
           </NavbarBrand>
 
           <Nav className="align-items-center d-md-none">
-            <Media className="align-items-center">
-              <span className="avatar avatar-sm rounded-circle">
-                <img
-                  alt="..."
-                  src={require('assets/img/theme/team-1-800x800.jpg')}
-                />
-              </span>
-            </Media>
+            <span />
           </Nav>
 
-          {/* Collapse */}
           <Collapse navbar isOpen={this.state.collapseOpen}>
-            {/* Collapse header */}
             <div className="navbar-collapse-header d-md-none">
               <Row>
                 <Col className="collapse-brand" xs="6">

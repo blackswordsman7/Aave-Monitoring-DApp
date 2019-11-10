@@ -1,5 +1,13 @@
 import Web3 from 'web3'
 
+// Contract
+// import LendingPoolABI from '../artifacts/LendingPool.json'
+
+// Types
+// import { AbiItem } from 'web3-utils'
+
+// import { LendingPoolAddress } from '../constants'
+
 export const getWeb3 = async () => {
   let web3: Web3
 
@@ -34,8 +42,15 @@ export const getWeb3 = async () => {
   // Get network from web3
   const networkId = await web3.eth.net.getId()
 
+  // Load contracts
+  // const lendingPool = new web3.eth.Contract(
+  //   LendingPoolABI as AbiItem[],
+  //   LendingPoolAddress
+  // )
+
   return {
     accounts,
+    // lendingPool,
     networkId,
     web3
   }

@@ -6,6 +6,7 @@ import { toast } from 'react-toastify'
 // Components
 import EventBadge from '../views/components/EventBadge'
 import Identicon from '../views/components/Identicon'
+import RoleBadge from '../views/components/RoleBadge'
 import Token from '../views/components/Token'
 
 // Utils
@@ -51,6 +52,15 @@ export const userHealthColumns = [
     text: 'User',
     sort: false,
     formatter: cell => formatUser(cell)
+  },
+  {
+    dataField: 'Roles',
+    text: 'Roles',
+    sort: false,
+    // eslint-disable-next-line react/display-name
+    formatter: cell => <RoleBadge roles={cell} />,
+    sortFunc: (a, b, order) =>
+      order === 'asc' ? a.localeCompare(b) : b.localeCompare(a)
   },
   {
     dataField: 'healthfactor',

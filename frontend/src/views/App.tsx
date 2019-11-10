@@ -26,6 +26,7 @@ import Header from './components/Header'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import Sidebar from './components/Sidebar'
+import UserHeader from './components/UserHeader'
 
 // Routes
 import routes from '../routes'
@@ -51,16 +52,18 @@ class App extends React.Component<AppProps> {
   }
 
   getBrandText = path => {
-    for (let i = 0; i < routes.length; i++) {
-      if (path === routes[i].path) {
-        return routes[i].name
-      }
-    }
-    return 'Aave'
+    const route = routes.find(r => r.path === path)
+    return route ? route.name : 'Aave'
+  }
+
+  getHeader = path => {
+    const route = routes.find(r => r.path === path)
+    return route && route.type === 'user' ? <UserHeader /> : <Header />
   }
 
   render() {
     const address = this.props.web3State.accounts[0]
+    const { pathname } = this.props.location
 
     return (
       <>
@@ -68,12 +71,12 @@ class App extends React.Component<AppProps> {
         <div className="main-content">
           <Navbar
             address={address}
-            brandText={this.getBrandText(this.props.location.pathname)}
+            brandText={this.getBrandText(pathname)}
             initWeb3={this.props.initWeb3}
             loading={this.props.web3State.loading}
           />
 
-          <Header />
+          {this.getHeader(pathname)}
 
           {routes.map(route => (
             <Route key={route.path} {...route} />

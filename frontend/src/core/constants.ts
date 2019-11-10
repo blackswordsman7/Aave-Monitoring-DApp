@@ -1,1 +1,5 @@
+export const KOVAN_NETWORK_ID = 42
 export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
+
+// Aave Contract Addresses
+export const LendingPoolAddress = '0xB36017F5aafDE1a9462959f0e53866433D373404'

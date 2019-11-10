@@ -33,6 +33,7 @@ export interface UsersCount {
 }
 
 export interface UserHealth {
+  Roles: Array<'Active' | 'Risky' | 'Whale'>
   address: string
   currentliquidationthreshold: string
   healthfactor: string
