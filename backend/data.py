@@ -24,7 +24,7 @@ db = connection = psycopg2.connect(user = DB_USER,
 cursor = db.cursor()
 
 #Delete all records from tables before inserting the data
-cursor.execute('''TRUNCATE TABLE users, history, health''')
+#cursor.execute('''TRUNCATE TABLE users, history, health''')
 
 db.commit()
 
@@ -115,7 +115,8 @@ def insert_db(event_name, eventsef):
         sql = ''' INSERT INTO history(event_name,timestamp,reserve, address, amount, target)
               VALUES(%s,%s,%s,%s,%s,%s) '''
         history = (event_name, int(events['args'].get("timestamp")), events['args'].get("_reserve"),\
-                    events['args'].get("_user"), int(events['args'].get("_amount")) \
+                    events['args'].get("_user") if events['args'].get("_user") is not None \
+                        else "0x0000000000000000000000000000000000000000", int(events['args'].get("_amount")) \
                         if events['args'].get("_amount") is not None else "", events['args'].get("_target") if event_name == "FlashLoan" else "")
         cursor.execute(sql, history)
 
@@ -146,8 +147,13 @@ def update_db(event_name, eventsef, reserve):
               VALUES(%s,%s,%s,%s,%s,%s,%s) '''
             history = (event_name, int(event['args'].get("timestamp")), event['args'].get("_reserve"),event['args'].get("_user"), \
                 int(event['args'].get("_amount")) if event['args'].get("_amount") is not None else "", events['args'].get("_target") if event_name == "FlashLoan" else "")
-            cursor.execute(sql, history)
-
+            
+            try:
+                cursor.execute(sql, history)
+            except Exception as exc:
+                print(exc)
+                print(history)
+                print(sql)
     
 def update_history():
     for res in data:
@@ -181,8 +187,8 @@ def update_health():
 def main():
     global blockNumber
     blockNumber = web3.eth.getBlock('latest').number
-    get_data()
-    get_history()
+    #get_data()
+    #get_history()
     while True:
         print("IN UPDATE")
         update_users()
