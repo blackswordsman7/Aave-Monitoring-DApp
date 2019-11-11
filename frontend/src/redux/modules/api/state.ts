@@ -5,12 +5,14 @@ import {
   TokenReserve,
   UsersCount,
   UserHistory,
-  UserHealth
+  UserHealth,
+  UniswapArbitrage
 } from '../../../types'
 
 export type ApiState = DeepReadonly<{
   error: Error | null
   ethPrice: number
+  isLoadingArbitrage: boolean
   isLoadingCount: boolean
   isLoadingHealth: boolean
   isLoadingHistory: boolean
@@ -21,4 +23,5 @@ export type ApiState = DeepReadonly<{
   usersCount: UsersCount
   userHealth: UserHealth[]
   userHistory: UserHistory[]
+  uniswapArbitrage: UniswapArbitrage[]
 }>

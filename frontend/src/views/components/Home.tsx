@@ -29,9 +29,12 @@ import {
 
 // Components
 import Token from './Token'
+import BubbleImage from './charts/BubbleImage'
+import ColumnImage from './charts/ColumnImage'
 
 // Types
 import { DefaultProps } from '../../core/props'
+import { TokenReserve } from '../../types'
 
 class Home extends React.Component<DefaultProps> {
   state = {}
@@ -59,13 +62,49 @@ class Home extends React.Component<DefaultProps> {
           <Row className="mt-5">
             <Col className="mb-5 mb-xl-0" xl="12">
               <Card className="shadow">
-                <CardHeader className="border-0">
+                <CardHeader>
                   <Row className="align-items-center">
                     <div className="col">
                       <h3 className="mb-0">Protocol Overview</h3>
                     </div>
                   </Row>
                 </CardHeader>
+
+                {!isLoadingReserves && tokenReserves.length > 0 && (
+                  <Card className="pl-5 pr-5 shadow">
+                    <Row>
+                      <Col xl={6}>
+                        <CardHeader className="border-0">
+                          <Row className="align-items-center">
+                            <div className="col">
+                              <h3 className="mb-0 text-center">
+                                Transactions count per reserve
+                              </h3>
+                            </div>
+                          </Row>
+                        </CardHeader>
+                        <BubbleImage
+                          tokenReserves={tokenReserves as TokenReserve[]}
+                        />
+                      </Col>
+                      <Col xl={6}>
+                        <CardHeader className="border-0">
+                          <Row className="align-items-center">
+                            <div className="col">
+                              <h3 className="mb-0 text-center">
+                                Total volume per reserve ($$)
+                              </h3>
+                            </div>
+                          </Row>
+                        </CardHeader>
+                        <ColumnImage
+                          tokenReserves={tokenReserves as TokenReserve[]}
+                        />
+                      </Col>
+                    </Row>
+                  </Card>
+                )}
+
                 <Table
                   className="align-items-center table-flush table-hover"
                   responsive
@@ -115,11 +154,10 @@ class Home extends React.Component<DefaultProps> {
                             >
                               {new Intl.NumberFormat('en-US', {
                                 style: 'currency',
-                                currency: 'ETH',
-                                currencyDisplay: 'name'
+                                currency: 'USD'
                               }).format(
                                 parseFloat(tr.availableLiquidity) *
-                                  parseFloat(tr.priceInEth)
+                                  parseFloat(tr.priceInUsd)
                               )}
                             </Tooltip>
                           </td>

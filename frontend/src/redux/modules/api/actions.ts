@@ -14,16 +14,36 @@ import {
   GET_USER_HISTORY_SUCCESS,
   GET_USER_HEALTH,
   GET_USER_HEALTH_ERROR,
-  GET_USER_HEALTH_SUCCESS
+  GET_USER_HEALTH_SUCCESS,
+  GET_UNISWAP_ARBITRAGE,
+  GET_UNISWAP_ARBITRAGE_ERROR,
+  GET_UNISWAP_ARBITRAGE_SUCCESS,
+  GET_ATOKENS_STATS,
+  GET_ATOKENS_STATS_ERROR,
+  GET_ATOKENS_STATS_SUCCESS,
+  GET_RESERVES_STATS,
+  GET_RESERVES_STATS_ERROR,
+  GET_RESERVES_STATS_SUCCESS
 } from './constants'
 
 // Types
 import {
+  ATokenStats,
+  ReserveStats,
   TokenReserve,
   UsersCount,
   UserHistory,
-  UserHealth
+  UserHealth,
+  UniswapArbitrage
 } from '../../../types'
+
+const getATokensStats = () => action(GET_ATOKENS_STATS)
+
+const getATokensStatsError = (payload: Error) =>
+  action(GET_ATOKENS_STATS_ERROR, payload)
+
+const getATokensStatsSuccess = (payload: ATokenStats[]) =>
+  action(GET_ATOKENS_STATS_SUCCESS, payload)
 
 const getEthPrice = () => action(GET_ETH_PRICE)
 
@@ -32,6 +52,14 @@ const getEthPriceError = (payload: Error) =>
 
 const getEthPriceSuccess = (payload: number) =>
   action(GET_ETH_PRICE_SUCCESS, payload)
+
+const getReservesStats = () => action(GET_RESERVES_STATS)
+
+const getReservesStatsError = (payload: Error) =>
+  action(GET_RESERVES_STATS_ERROR, payload)
+
+const getReservesStatsSuccess = (payload: ReserveStats[]) =>
+  action(GET_RESERVES_STATS_SUCCESS, payload)
 
 const getTokenReserves = () => action(GET_TOKEN_RESERVES)
 
@@ -65,10 +93,26 @@ const getUserHistoryError = (payload: Error) =>
 const getUserHistorySuccess = (payload: UserHistory[]) =>
   action(GET_USER_HISTORY_SUCCESS, payload)
 
+const getUniswapArbitrage = () => action(GET_UNISWAP_ARBITRAGE)
+
+const getUniswapArbitrageError = (payload: Error) =>
+  action(GET_UNISWAP_ARBITRAGE_ERROR, payload)
+
+const getUniswapArbitrageSuccess = (payload: UniswapArbitrage[]) =>
+  action(GET_UNISWAP_ARBITRAGE_SUCCESS, payload)
+
 export const apiActions = {
+  getATokensStats,
+  getATokensStatsError,
+  getATokensStatsSuccess,
+
   getEthPrice,
   getEthPriceError,
   getEthPriceSuccess,
+
+  getReservesStats,
+  getReservesStatsError,
+  getReservesStatsSuccess,
 
   getTokenReserves,
   getTokenReservesError,
@@ -84,5 +128,9 @@ export const apiActions = {
 
   getUserHistory,
   getUserHistoryError,
-  getUserHistorySuccess
+  getUserHistorySuccess,
+
+  getUniswapArbitrage,
+  getUniswapArbitrageError,
+  getUniswapArbitrageSuccess
 }

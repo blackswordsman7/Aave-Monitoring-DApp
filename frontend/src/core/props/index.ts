@@ -1,4 +1,5 @@
 export * from './App'
+export * from './Arbitrage'
 export * from './Dashboard'
 export * from './Default'
 export * from './Header'

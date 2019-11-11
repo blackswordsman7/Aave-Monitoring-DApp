@@ -1,7 +1,7 @@
 import { Epic, ofType } from 'redux-observable'
 import { of } from 'rxjs'
 import { ajax } from 'rxjs/ajax'
-import { catchError, map, mergeMap } from 'rxjs/operators'
+import { catchError, map, mergeMap, switchMap } from 'rxjs/operators'
 
 import {
   apiActions,
@@ -11,7 +11,9 @@ import {
   GET_TOKEN_RESERVES_SUCCESS,
   GET_USERS_COUNT,
   GET_USER_HEALTH,
-  GET_USER_HISTORY
+  GET_USER_HISTORY,
+  GET_UNISWAP_ARBITRAGE,
+  GET_ATOKENS_STATS
 } from './'
 import { RootAction, RootState } from '../../store'
 
@@ -20,8 +22,29 @@ import {
   TokenReserve,
   UsersCount,
   UserHistory,
-  UserHealth
+  UserHealth,
+  UniswapArbitrage,
+  ATokenStats,
+  ReserveStats
 } from '../../../types'
+
+const getATokensStatsEpic: Epic<
+  RootAction,
+  RootAction,
+  RootState
+> = action$ => {
+  return action$.pipe(
+    ofType(GET_ATOKENS_STATS),
+    mergeMap(() =>
+      ajax.getJSON('https://aavemonitor.herokuapp.com/stats/atokens/').pipe(
+        map(response =>
+          apiActions.getATokensStatsSuccess(response as ATokenStats[])
+        ),
+        catchError(error => of(apiActions.getATokensStatsError(error)))
+      )
+    )
+  )
+}
 
 const getEthPriceEpic: Epic<RootAction, RootAction, RootState> = action$ => {
   return action$.pipe(
@@ -50,6 +73,24 @@ const getEthPriceSuccessEpic: Epic<
   )
 }
 
+const getReservesStatsEpic: Epic<
+  RootAction,
+  RootAction,
+  RootState
+> = action$ => {
+  return action$.pipe(
+    ofType(GET_ATOKENS_STATS),
+    mergeMap(() =>
+      ajax.getJSON('https://aavemonitor.herokuapp.com/stats/reserves/').pipe(
+        map(response =>
+          apiActions.getReservesStatsSuccess(response as ReserveStats[])
+        ),
+        catchError(error => of(apiActions.getReservesStatsError(error)))
+      )
+    )
+  )
+}
+
 const getTokenReservesEpic: Epic<
   RootAction,
   RootAction,
@@ -57,7 +98,7 @@ const getTokenReservesEpic: Epic<
 > = action$ => {
   return action$.pipe(
     ofType(GET_TOKEN_RESERVES),
-    mergeMap(() =>
+    switchMap(() =>
       ajax.getJSON('https://dlp-api-dev.testing.aave.com/data/reserves').pipe(
         map(response =>
           apiActions.getTokenReservesSuccess(response as TokenReserve[])
@@ -75,7 +116,13 @@ const getTokenReservesSuccessEpic: Epic<
 > = action$ => {
   return action$.pipe(
     ofType(GET_TOKEN_RESERVES_SUCCESS),
-    mergeMap(() => of(apiActions.getUserHistory()))
+    mergeMap(() =>
+      of(
+        apiActions.getUserHistory(),
+        apiActions.getATokensStats(),
+        apiActions.getReservesStats()
+      )
+    )
   )
 }
 
@@ -121,12 +168,40 @@ const getUserHistoryEpic: Epic<RootAction, RootAction, RootState> = action$ => {
   )
 }
 
+const getUniswapArbitrageEpic: Epic<
+  RootAction,
+  RootAction,
+  RootState
+> = action$ => {
+  return action$.pipe(
+    ofType(GET_UNISWAP_ARBITRAGE),
+    mergeMap(() =>
+      ajax
+        .getJSON(
+          'https://cors-anywhere.herokuapp.com/https://www.uniswaproi.com/pool_ranking/?days=30',
+          { Origin: null }
+        )
+        .pipe(
+          map(response =>
+            apiActions.getUniswapArbitrageSuccess(
+              response as UniswapArbitrage[]
+            )
+          ),
+          catchError(error => of(apiActions.getUniswapArbitrageError(error)))
+        )
+    )
+  )
+}
+
 export default [
+  getATokensStatsEpic,
   getEthPriceEpic,
   getEthPriceSuccessEpic,
+  getReservesStatsEpic,
   getTokenReservesEpic,
   getTokenReservesSuccessEpic,
   getUsersCountEpic,
   getUserHealthEpic,
-  getUserHistoryEpic
+  getUserHistoryEpic,
+  getUniswapArbitrageEpic
 ]
