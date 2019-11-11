@@ -17,7 +17,7 @@ const EventBadge = (props: Props) => {
         badgeColor = 'badge-primary'
         break
 
-      case 'Flashloan':
+      case 'FlashLoan':
         badgeColor = 'badge-danger'
         break
 

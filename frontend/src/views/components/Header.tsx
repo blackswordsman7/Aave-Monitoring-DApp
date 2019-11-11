@@ -55,8 +55,8 @@ class Header extends React.Component<HeaderProps> {
       0
     )
 
-    const flashloanCount = userHistory.filter(
-      uh => uh.event_name === 'Flashloan'
+    const flashLoanCount = userHistory.filter(
+      uh => uh.event_name === 'FlashLoan'
     ).length
 
     const volume = tokenReserves
@@ -168,10 +168,10 @@ class Header extends React.Component<HeaderProps> {
                             tag="h5"
                             className="text-uppercase text-muted mb-0"
                           >
-                            Flashloans
+                            FlashLoans
                           </CardTitle>
                           <span className="h2 font-weight-bold mb-0">
-                            <CountUp end={flashloanCount} />
+                            <CountUp end={flashLoanCount} />
                           </span>
                         </div>
                         <Col className="col-auto">

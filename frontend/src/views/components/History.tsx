@@ -58,7 +58,7 @@ const EventValue = (props: SingleValueProps<any>) => (
 const eventOptions = [
   { label: 'Borrow', value: 'Borrow' },
   { label: 'Deposit', value: 'Deposit' },
-  { label: 'Flashloan', value: 'Flashloan' },
+  { label: 'FlashLoan', value: 'FlashLoan' },
   { label: 'Redeem', value: 'Redeem' },
   { label: 'Repay', value: 'Repay' },
   { label: 'Swap', value: 'Swap' }
