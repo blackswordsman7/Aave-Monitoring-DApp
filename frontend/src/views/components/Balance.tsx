@@ -6,7 +6,7 @@ import Token from './Token'
 
 // Types
 import { TokenReserve, UserReserve } from '../../types'
-import { getTokenDetails } from '../../core/utils'
+import { getTokenDetails, parseAmount } from '../../core/utils'
 
 interface Props {
   reserve: UserReserve
@@ -21,6 +21,14 @@ const Balance = (props: Props) => {
     'symbol'
   ) as TokenReserve
 
+  const borrowBalanceInUsd =
+    parseFloat(parseAmount(reserve.currentBorrowBalance, token.decimals)) *
+    parseFloat(token.priceInUsd)
+
+  const tokenBalanceInUsd =
+    parseFloat(parseAmount(reserve.currentUnderlyingBalance, token.decimals)) *
+    parseFloat(token.priceInUsd)
+
   return (
     <Col className="pb-5 balance" lg={6} xl={4}>
       <Card className="shadow">
@@ -28,23 +36,44 @@ const Balance = (props: Props) => {
           <Row className="align-items-center">
             <Col>
               <Token size={30} token={token.symbol} />
-              <span className="ml-2 font-weight-bold">$0.00</span>
+              <span className="ml-2 font-weight-bold">
+                {new Intl.NumberFormat('en-US', {
+                  style: 'currency',
+                  currency: 'USD'
+                }).format(tokenBalanceInUsd)}
+              </span>
             </Col>
           </Row>
         </CardHeader>
         <CardBody>
           <p className="details">
-            Deposit (APR): <span className="float-right text-gray">0.00%</span>
+            Borrowed:{' '}
+            <span className="float-right text-gray">
+              {new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD'
+              }).format(borrowBalanceInUsd)}
+            </span>
           </p>
           <hr className="my-3" />
           <p className="details">
-            Stable Borrow (APR):{' '}
-            <span className="float-right text-gray">0.00%</span>
+            Deposit (APR):{' '}
+            <span className="float-right text-gray">
+              {`${(parseFloat(token.liquidityRate) * 100).toFixed(2)} %`}
+            </span>
           </p>
           <hr className="my-3" />
           <p className="details">
-            Variable Borrow (APR):{' '}
-            <span className="float-right text-gray">0.00%</span>
+            {reserve.borrowRateMode ? 'Variable' : 'Stable'} Borrow (APR):{' '}
+            <span className="float-right text-gray">
+              {`${(
+                parseFloat(
+                  reserve.borrowRateMode
+                    ? token.variableBorrowRate
+                    : token.fixedBorrowRate
+                ) * 100
+              ).toFixed(2)} %`}
+            </span>
           </p>
         </CardBody>
       </Card>

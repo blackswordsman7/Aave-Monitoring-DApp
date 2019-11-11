@@ -59,7 +59,7 @@ class Dashboard extends React.Component<DashboardProps> {
     const { isLoadingReserves, reserves } = this.props.userState
 
     const collateralReserves = reserves.filter(
-      r => r.currentUnderlyingBalance > 0
+      r => r.currentUnderlyingBalance > 0 || r.currentBorrowBalance > 0
     )
 
     return (

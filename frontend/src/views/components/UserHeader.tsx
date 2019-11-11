@@ -100,13 +100,13 @@ class UserHeader extends React.Component<UserHeaderProps> {
                             tag="h5"
                             className="text-uppercase text-muted mb-0"
                           >
-                            Total Collateral
+                            Collateral
                           </CardTitle>
                           {this.renderCard(collateral, 'collateralTooltip')}
                         </div>
                         <Col className="col-auto">
                           <div className="icon icon-shape bg-default text-white rounded-circle shadow">
-                            <i className="fas fa-coins" />
+                            <i className="fas fa-wallet" />
                           </div>
                         </Col>
                       </Row>
@@ -128,7 +128,7 @@ class UserHeader extends React.Component<UserHeaderProps> {
                         </div>
                         <Col className="col-auto">
                           <div className="icon icon-shape bg-green text-white rounded-circle shadow">
-                            <i className="fas fa-users" />
+                            <i className="fas fa-coins" />
                           </div>
                         </Col>
                       </Row>
@@ -149,8 +149,8 @@ class UserHeader extends React.Component<UserHeaderProps> {
                           {this.renderCard(borrow, 'borrowTooltip')}
                         </div>
                         <Col className="col-auto">
-                          <div className="icon icon-shape bg-yellow text-white rounded-circle shadow">
-                            <i className="ni ni-money-coins" />
+                          <div className="icon icon-shape bg-danger text-white rounded-circle shadow">
+                            <i className="fas fa-hand-holding-usd" />
                           </div>
                         </Col>
                       </Row>
