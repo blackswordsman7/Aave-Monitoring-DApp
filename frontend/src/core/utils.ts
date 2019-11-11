@@ -26,7 +26,7 @@ export const getContractAddress = (contract: Artifact, networkId: number) => {
  * @return Number
  */
 export const fromBaseUnit = (value, decimals) => {
-  return parseInt(value) / 10 ** decimals
+  return (typeof value === 'string' ? parseInt(value) : value) / 10 ** decimals
 }
 
 /**
