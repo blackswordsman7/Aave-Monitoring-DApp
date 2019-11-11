@@ -33,7 +33,7 @@ cursor.execute('''
     CREATE TABLE IF NOT EXISTS users(address TEXT, reserve TEXT, timestamp INTEGER, blocknumber integer, PRIMARY KEY(address, reserve))
 ''')
 cursor.execute(''' CREATE TABLE IF NOT EXISTS history(address TEXT, timestamp INTEGER, event_name TEXT,
-                   reserve TEXT, amount TEXT, target TEXT, PRIMARY KEY(address, timestamp))''')
+                   reserve TEXT, amount TEXT, target TEXT, txHash TEXT, PRIMARY KEY(address, timestamp))''')
 
 cursor.execute(''' CREATE TABLE IF NOT EXISTS health(address TEXT PRIMARY KEY, totLiquidityETH TEXT, 
                     totalCollateral TEXT, totalBorrowsETH TEXT, currentLiquidationThreshold TEXT, ltv TEXT, healthFactor TEXT)''')
@@ -112,12 +112,13 @@ def update_users():
 def insert_db(event_name, eventsef):
     for events in eventsef:
         args = events['args']
-        sql = ''' INSERT INTO history(event_name,timestamp,reserve, address, amount, target)
-              VALUES(%s,%s,%s,%s,%s,%s) '''
+        sql = ''' INSERT INTO history(event_name,timestamp,reserve, address, amount, target, txHash)
+              VALUES(%s,%s,%s,%s,%s,%s,%s) '''
         history = (event_name, int(events['args'].get("timestamp")), events['args'].get("_reserve"),\
                     events['args'].get("_user") if events['args'].get("_user") is not None \
                         else "0x0000000000000000000000000000000000000000", int(events['args'].get("_amount")) \
-                        if events['args'].get("_amount") is not None else "", events['args'].get("_target") if event_name == "FlashLoan" else "")
+                        if events['args'].get("_amount") is not None else "",\
+                            events['args'].get("_target") if event_name == "FlashLoan" else "", events['transactionHash'].hex())
         cursor.execute(sql, history)
 
 def get_history():
@@ -139,14 +140,17 @@ def get_history():
     db.commit()
 
 def update_db(event_name, eventsef, reserve):
+    print(eventsef)
+    print(blockNumber)
     for event in eventsef:
         cursor.execute('''select COUNT(*) from history where reserve = %s AND event_name = %s AND timestamp = %s AND address = %s''', [reserve, event_name, int(event['args'].get("timestamp")), event['args'].get("_user")])
         data = cursor.fetchone()[0]
         if int(data) == 0:    
-            sql = ''' INSERT INTO history(event_name,timestamp,reserve, address, amount, target)
+            sql = ''' INSERT INTO history(event_name,timestamp,reserve, address, amount, target, txHash)
               VALUES(%s,%s,%s,%s,%s,%s,%s) '''
             history = (event_name, int(event['args'].get("timestamp")), event['args'].get("_reserve"),event['args'].get("_user"), \
-                int(event['args'].get("_amount")) if event['args'].get("_amount") is not None else "", events['args'].get("_target") if event_name == "FlashLoan" else "")
+                int(event['args'].get("_amount")) if event['args'].get("_amount") is not None else "",\
+                     event['args'].get("_target") if event_name == "FlashLoan" else "", event['transactionHash'].hex())
             
             try:
                 cursor.execute(sql, history)
@@ -186,7 +190,7 @@ def update_health():
 
 def main():
     global blockNumber
-    blockNumber = web3.eth.getBlock('latest').number
+    blockNumber = ( web3.eth.getBlock('latest').number - 10 )
     #get_data()
     #get_history()
     while True:
@@ -194,9 +198,10 @@ def main():
         update_users()
         update_history()
         update_health()
-        blockNumber = web3.eth.getBlock('latest').number
+        blockNumber = ( web3.eth.getBlock('latest').number - 10 )
+        print(blockNumber)
         db.commit()
-        time.sleep(30)
+        time.sleep(3)
 
 if __name__ == '__main__':
     main()
