@@ -1,3 +1,4 @@
+export { default as ArbitrageContainer } from './Arbitrage'
 export { default as DashboardContainer } from './Dashboard'
 export { default as HomeContainer } from './Home'
 export { default as HealthContainer } from './Health'

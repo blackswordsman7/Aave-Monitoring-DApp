@@ -1,5 +1,5 @@
-import React from 'react'
-import { Card, CardBody, CardHeader, Col, Row } from 'reactstrap'
+import React, { useState } from 'react'
+import { Card, CardBody, CardHeader, Col, Row, Tooltip } from 'reactstrap'
 
 // Components
 import Token from './Token'
@@ -14,6 +14,7 @@ interface Props {
 }
 
 const Balance = (props: Props) => {
+  const [isOpen, setIsOpen] = useState(false)
   const { reserve, tokenReserves } = props
   const token = getTokenDetails(
     reserve.reserve,
@@ -21,13 +22,18 @@ const Balance = (props: Props) => {
     'symbol'
   ) as TokenReserve
 
-  const borrowBalanceInUsd =
-    parseFloat(parseAmount(reserve.currentBorrowBalance, token.decimals)) *
-    parseFloat(token.priceInUsd)
+  const priceInUsd = parseFloat(token.priceInUsd)
 
-  const tokenBalanceInUsd =
-    parseFloat(parseAmount(reserve.currentUnderlyingBalance, token.decimals)) *
-    parseFloat(token.priceInUsd)
+  const borrowBalance = parseFloat(
+    parseAmount(reserve.currentBorrowBalance, token.decimals)
+  )
+  const borrowBalanceInUsd = borrowBalance * priceInUsd
+
+  const tokenBalance = parseFloat(
+    parseAmount(reserve.currentUnderlyingBalance, token.decimals)
+  )
+
+  const tokenBalanceInUsd = tokenBalance * priceInUsd
 
   return (
     <Col className="pb-5 balance" lg={6} xl={4}>
@@ -39,6 +45,15 @@ const Balance = (props: Props) => {
               <span className="ml-2 font-weight-bold">
                 {new Intl.NumberFormat('en-US', {
                   style: 'currency',
+                  currency: 'USD',
+                  currencyDisplay: 'name'
+                })
+                  .format(tokenBalance)
+                  .replace('US dollars', token.symbol)}
+              </span>
+              <span className="float-right text-gray">
+                {new Intl.NumberFormat('en-US', {
+                  style: 'currency',
                   currency: 'USD'
                 }).format(tokenBalanceInUsd)}
               </span>
@@ -46,14 +61,31 @@ const Balance = (props: Props) => {
           </Row>
         </CardHeader>
         <CardBody>
-          <p className="details">
+          <p
+            className="details"
+            id={`${token.symbol.toLowerCase()}BorrowedTooltip`}
+          >
             Borrowed:{' '}
             <span className="float-right text-gray">
               {new Intl.NumberFormat('en-US', {
                 style: 'currency',
+                currency: 'USD',
+                currencyDisplay: 'name'
+              })
+                .format(borrowBalance)
+                .replace('US dollars', token.symbol)}
+            </span>
+            <Tooltip
+              placement="top"
+              isOpen={isOpen}
+              target={`${token.symbol.toLowerCase()}BorrowedTooltip`}
+              toggle={() => setIsOpen(!isOpen)}
+            >
+              {new Intl.NumberFormat('en-US', {
+                style: 'currency',
                 currency: 'USD'
               }).format(borrowBalanceInUsd)}
-            </span>
+            </Tooltip>
           </p>
           <hr className="my-3" />
           <p className="details">

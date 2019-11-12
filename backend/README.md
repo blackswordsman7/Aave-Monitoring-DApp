@@ -8,7 +8,7 @@ Clone this repo and go to this folder:
 
 ```
 git clone https://github.com/thesachinmittal/Aave-Monitoring-DApp.git
-cd Aaave-Monitoring-Dapp
+cd Aave-Monitoring-Dapp
 cd backend 
 ```
 

@@ -32,7 +32,7 @@ class Footer extends React.Component {
                 rel="noopener noreferrer"
                 target="_blank"
               >
-                Aave Monitoring
+                DeFi-Verse
               </a>
             </div>
           </Col>
@@ -41,7 +41,7 @@ class Footer extends React.Component {
             <Nav className="nav-footer justify-content-center justify-content-xl-end">
               <NavItem>
                 <NavLink href="/" rel="noopener noreferrer" target="_blank">
-                  Aave Monitoring
+                  DeFi-Verse
                 </NavLink>
               </NavItem>
 

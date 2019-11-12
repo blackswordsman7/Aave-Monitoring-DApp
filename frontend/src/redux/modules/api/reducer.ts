@@ -3,12 +3,21 @@ import { ActionType } from 'typesafe-actions'
 import {
   apiActions,
   ApiState,
+  GET_ATOKENS_STATS,
+  GET_ATOKENS_STATS_ERROR,
+  GET_ATOKENS_STATS_SUCCESS,
   GET_ETH_PRICE,
   GET_ETH_PRICE_ERROR,
   GET_ETH_PRICE_SUCCESS,
+  GET_RESERVES_STATS,
+  GET_RESERVES_STATS_ERROR,
+  GET_RESERVES_STATS_SUCCESS,
   GET_TOKEN_RESERVES,
   GET_TOKEN_RESERVES_ERROR,
   GET_TOKEN_RESERVES_SUCCESS,
+  GET_UNISWAP_ARBITRAGE,
+  GET_UNISWAP_ARBITRAGE_ERROR,
+  GET_UNISWAP_ARBITRAGE_SUCCESS,
   GET_USER_HEALTH,
   GET_USER_HEALTH_ERROR,
   GET_USER_HEALTH_SUCCESS,
@@ -19,13 +28,14 @@ import {
   GET_USERS_COUNT_ERROR,
   GET_USERS_COUNT_SUCCESS
 } from './'
-
 // Utils
 import { getTokenDetails } from '../../../core/utils'
+import { ATokenStats, TokenReserve } from '../../../types'
 
 const iAS: ApiState = {
   error: null,
   ethPrice: 0,
+  isLoadingArbitrage: false,
   isLoadingCount: false,
   isLoadingHealth: false,
   isLoadingHistory: false,
@@ -35,7 +45,8 @@ const iAS: ApiState = {
   tokenReserves: [],
   usersCount: {},
   userHealth: [],
-  userHistory: []
+  userHistory: [],
+  uniswapArbitrage: []
 }
 
 type Actions = ActionType<typeof apiActions>
@@ -45,6 +56,61 @@ export const apiReducer = (
   action: Actions
 ): ApiState => {
   switch (action.type) {
+    case GET_ATOKENS_STATS:
+    case GET_RESERVES_STATS:
+      return { ...state, error: null, isLoadingReserves: true }
+
+    case GET_ATOKENS_STATS_SUCCESS: {
+      const tokenReserves = state.tokenReserves.map(tr => {
+        const reserve = tr as TokenReserve
+        const stats = action.payload.find(
+          a => a.name === tr.symbol
+        ) as ATokenStats
+
+        reserve.aTokenExchangeRate = stats.exchangeRate
+        reserve.aTokenTotalSupply = stats.totalSupply
+        reserve.aTokenTransactionCount = stats.Transaction_count
+        reserve.aTokenPriceInUsd = stats.priceinUSD
+
+        return reserve
+      })
+
+      return {
+        ...state,
+        error: null,
+        isLoadingReserves: false,
+        tokenReserves
+      }
+    }
+
+    case GET_RESERVES_STATS_SUCCESS: {
+      const tokenReserves = state.tokenReserves.map(tr => {
+        const reserve = tr as TokenReserve
+        const stats = action.payload.find(
+          r => r.name === tr.symbol
+        ) as ATokenStats
+
+        reserve.transactionCount = stats.Transaction_count
+
+        return reserve
+      })
+
+      return {
+        ...state,
+        error: null,
+        isLoadingReserves: false,
+        tokenReserves
+      }
+    }
+
+    case GET_ATOKENS_STATS_ERROR:
+    case GET_RESERVES_STATS_ERROR:
+      return {
+        ...state,
+        error: action.payload,
+        isLoadingReserves: false
+      }
+
     case GET_ETH_PRICE:
       return { ...state, error: null, isLoadingPrice: true }
 
@@ -147,6 +213,29 @@ export const apiReducer = (
         ...state,
         error: action.payload,
         isLoadingHistory: false
+      }
+
+    case GET_UNISWAP_ARBITRAGE:
+      return { ...state, error: null, isLoadingArbitrage: true }
+
+    case GET_UNISWAP_ARBITRAGE_SUCCESS: {
+      const uniswapArbitrage = action.payload
+        .filter(a => state.tokens.includes(a.token_symbol))
+        .sort((a, b) => b.projected_total_yield - a.projected_total_yield)
+
+      return {
+        ...state,
+        error: null,
+        isLoadingArbitrage: false,
+        uniswapArbitrage
+      }
+    }
+
+    case GET_UNISWAP_ARBITRAGE_ERROR:
+      return {
+        ...state,
+        error: action.payload,
+        isLoadingArbitrage: false
       }
 
     default:

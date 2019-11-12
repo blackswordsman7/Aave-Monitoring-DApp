@@ -96,8 +96,8 @@ class Sidebar extends React.Component<Props> {
             <span className="navbar-toggler-icon" />
           </button>
 
-          <NavbarBrand className="pt-0 ml--5" to="/" tag={Link}>
-            Aave Monitoring
+          <NavbarBrand className="pt-0" to="/" tag={Link}>
+            DeFi-Verse
           </NavbarBrand>
 
           <Nav className="align-items-center d-md-none">
@@ -108,7 +108,7 @@ class Sidebar extends React.Component<Props> {
             <div className="navbar-collapse-header d-md-none">
               <Row>
                 <Col className="collapse-brand" xs="6">
-                  <Link to="/">Aave Monitoring</Link>
+                  <Link to="/">DeFi-Verse</Link>
                 </Col>
                 <Col className="collapse-close" xs="6">
                   <button

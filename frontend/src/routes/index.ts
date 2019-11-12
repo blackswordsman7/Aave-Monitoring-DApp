@@ -49,6 +49,14 @@ const routes = [
     icon: 'ni ni-tv-2 text-red',
     component: Containers.DashboardContainer,
     type: 'user'
+  },
+  {
+    path: '/arbitrage',
+    exact: false,
+    name: 'Arbitrage',
+    icon: 'fas fa-exchange-alt text-dark',
+    component: Containers.ArbitrageContainer,
+    type: 'user'
   }
 ]
 
