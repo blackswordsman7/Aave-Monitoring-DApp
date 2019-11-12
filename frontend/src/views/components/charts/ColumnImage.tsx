@@ -29,8 +29,6 @@ class ColumnImage extends React.Component<Props> {
       })
       .sort((a, b) => Number(a.value) - Number(b.value))
 
-    console.log(data)
-
     const scale = {
       value: {
         min: 0

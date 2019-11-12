@@ -16,19 +16,10 @@
 
 */
 import React from 'react'
-import {
-  Card,
-  CardHeader,
-  Table,
-  Container,
-  Row,
-  Col,
-  Tooltip,
-  Spinner
-} from 'reactstrap'
+import { Card, CardHeader, Container, Row, Col, Spinner } from 'reactstrap'
 
 // Components
-import Token from './Token'
+import Asset from './Asset'
 import BubbleImage from './charts/BubbleImage'
 import ColumnImage from './charts/ColumnImage'
 
@@ -36,10 +27,13 @@ import ColumnImage from './charts/ColumnImage'
 import { DefaultProps } from '../../core/props'
 import { TokenReserve } from '../../types'
 
-class Home extends React.Component<DefaultProps> {
-  state = {}
+// Utils
+import { getTokenDetails } from '../../core/utils'
 
-  toggle = targetName => {
+class Home extends React.Component<DefaultProps> {
+  // state = {}
+
+  /*toggle = targetName => {
     if (!this.state[targetName]) {
       this.setState({
         ...this.state,
@@ -51,10 +45,17 @@ class Home extends React.Component<DefaultProps> {
         [targetName]: !this.state[targetName]
       })
     }
-  }
+  }*/
 
   render() {
     const { isLoadingReserves, tokenReserves, usersCount } = this.props.apiState
+    const daiTokenPriceInUsd =
+      tokenReserves.length !== 0
+        ? parseFloat(
+            (getTokenDetails('DAI', tokenReserves, 'symbol') as TokenReserve)
+              .priceInUsd
+          )
+        : 0
 
     return (
       <>
@@ -71,7 +72,7 @@ class Home extends React.Component<DefaultProps> {
                 </CardHeader>
 
                 {!isLoadingReserves && tokenReserves.length > 0 && (
-                  <Card className="pl-5 pr-5 shadow">
+                  <Card className="pl-5 pr-5 mb-5 shadow">
                     <Row>
                       <Col xl={6}>
                         <CardHeader className="border-0">
@@ -105,7 +106,24 @@ class Home extends React.Component<DefaultProps> {
                   </Card>
                 )}
 
-                <Table
+                <Row className="pl-5 pr-5">
+                  {isLoadingReserves ? (
+                    <Col className="text-center mt-5 mb-5">
+                      <Spinner color="primary" />
+                    </Col>
+                  ) : (
+                    tokenReserves.map(token => (
+                      <Asset
+                        key={token.symbol}
+                        daiTokenPriceInUsd={daiTokenPriceInUsd}
+                        token={token}
+                        userCount={usersCount[token.name]}
+                      />
+                    ))
+                  )}
+                </Row>
+
+                {/*<Table
                   className="align-items-center table-flush table-hover"
                   responsive
                 >
@@ -180,7 +198,7 @@ class Home extends React.Component<DefaultProps> {
                       ))
                     )}
                   </tbody>
-                </Table>
+                </Table>*/}
               </Card>
             </Col>
           </Row>
