@@ -27,11 +27,18 @@ Clone this repo and go to this folder:
 
 ```
 git clone https://github.com/thesachinmittal/Aave-Monitoring-DApp.git
-cd Aave-Monitoring-Dapp
+cd Aave-Monitoring-DApp
 cd backend 
 ```
 
+For `ubuntu`, you need to have the libsystemd installed, otherwise when installing python modules it will throw you error:
+
+`sudo apt install libsystemd-dev`
+
+Create a python3 environment variable and activate it.
+
 Install Python modules:
+
 `pip3 install -r requirements.txt`
 
 Change the name of `.env.example` to `.env` and insert the required informations
@@ -43,7 +50,6 @@ DB_HOST=stronghost.com
 DB_NAME=fast_name
 INFURA_KEY=543...
 CONTRACT_ADDRESS=0x.... you know it
-
 ```
 
 In order for the API to work you need to first start inserting the events in the DB, for doing so you need to run `data.py` in background: 
