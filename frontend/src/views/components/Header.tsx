@@ -137,7 +137,8 @@ class Header extends React.Component<HeaderProps> {
                           >
                             {numeral(volume)
                               .format('(0a)')
-                              .toUpperCase()}{' '}
+                              .toUpperCase()}
+                            {'+ '}
                             ETH
                           </span>
                           <Tooltip
