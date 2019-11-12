@@ -24,7 +24,9 @@ db = connection = psycopg2.connect(user = DB_USER,
 cursor = db.cursor()
 
 #Delete all records from tables before inserting the data
-#cursor.execute('''TRUNCATE TABLE users, history, health''')
+cursor.execute("DROP TABLE IF EXISTS users")
+cursor.execute("DROP TABLE IF EXISTS history")
+cursor.execute("DROP TABLE IF EXISTS health")
 
 db.commit()
 
@@ -140,8 +142,6 @@ def get_history():
     db.commit()
 
 def update_db(event_name, eventsef, reserve):
-    print(eventsef)
-    print(blockNumber)
     for event in eventsef:
         cursor.execute('''select COUNT(*) from history where reserve = %s AND event_name = %s AND timestamp = %s AND address = %s''', [reserve, event_name, int(event['args'].get("timestamp")), event['args'].get("_user")])
         data = cursor.fetchone()[0]
@@ -199,7 +199,6 @@ def main():
         update_history()
         update_health()
         blockNumber = ( web3.eth.getBlock('latest').number - 10 )
-        print(blockNumber)
         db.commit()
         time.sleep(3)
 
