@@ -191,8 +191,8 @@ def update_health():
 def main():
     global blockNumber
     blockNumber = ( web3.eth.getBlock('latest').number - 10 )
-    #get_data()
-    #get_history()
+    get_data()
+    get_history()
     while True:
         print("IN UPDATE")
         update_users()
