@@ -32,6 +32,9 @@ import {
 import { HeaderProps } from '../../core/props'
 import { RootState } from '../../redux/store'
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const numeral = require('numeral')
+
 class Header extends React.Component<HeaderProps> {
   state = {
     showVolumeTooltip: false
@@ -132,11 +135,10 @@ class Header extends React.Component<HeaderProps> {
                             className="h2 font-weight-bold mb-0"
                             id="VolumeTooltip"
                           >
-                            {new Intl.NumberFormat('en-US', {
-                              style: 'currency',
-                              currency: 'ETH',
-                              currencyDisplay: 'name'
-                            }).format(volume)}
+                            {numeral(volume)
+                              .format('(0a)')
+                              .toUpperCase()}{' '}
+                            ETH
                           </span>
                           <Tooltip
                             placement="top"

@@ -57,6 +57,7 @@ class Dashboard extends React.Component<DashboardProps> {
   render() {
     const { tokenReserves } = this.props.apiState
     const { isLoadingReserves, reserves } = this.props.userState
+    const { accounts } = this.props.web3State
 
     const collateralReserves = reserves.filter(
       r => r.currentUnderlyingBalance > 0 || r.currentBorrowBalance > 0
@@ -84,7 +85,9 @@ class Dashboard extends React.Component<DashboardProps> {
                     <Row>
                       {collateralReserves.length === 0 ? (
                         <Col className="text-center pb-5">
-                          {`Looks like you don't have balances in any of the reserves`}
+                          {accounts.length === 0
+                            ? `Please connect to Metamask in order to see your reserve balances`
+                            : `Looks like you don't have balances in any of the reserves`}
                         </Col>
                       ) : (
                         collateralReserves.map(r => (

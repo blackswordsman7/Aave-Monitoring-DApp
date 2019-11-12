@@ -14,15 +14,29 @@ interface Props {
 }
 
 const Balance = (props: Props) => {
-  const [isOpen, setIsOpen] = useState(false)
+  const [isATokenOpen, setIsATokenOpen] = useState(false)
+  const [isBorrowOpen, setIsBorrowOpen] = useState(false)
+
   const { reserve, tokenReserves } = props
   const token = getTokenDetails(
     reserve.reserve,
     tokenReserves,
     'symbol'
   ) as TokenReserve
+  const daiTokenPriceInUsd = (getTokenDetails(
+    'DAI',
+    tokenReserves,
+    'symbol'
+  ) as TokenReserve).priceInUsd
 
   const priceInUsd = parseFloat(token.priceInUsd)
+
+  const aTokenBalance = parseFloat(
+    parseAmount(reserve.currentATokenBalance, token.decimals)
+  )
+  const aTokenBalanceInUsd =
+    (aTokenBalance / (token.aTokenExchangeRate as number)) *
+    parseFloat(daiTokenPriceInUsd)
 
   const borrowBalance = parseFloat(
     parseAmount(reserve.currentBorrowBalance, token.decimals)
@@ -63,6 +77,33 @@ const Balance = (props: Props) => {
         <CardBody>
           <p
             className="details"
+            id={`${token.symbol.toLowerCase()}ATokenTooltip`}
+          >
+            aToken Balance:{' '}
+            <span className="float-right text-gray">
+              {new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                currencyDisplay: 'name'
+              })
+                .format(aTokenBalance)
+                .replace('US dollars', `a${token.symbol}`)}
+            </span>
+            <Tooltip
+              placement="top"
+              isOpen={isATokenOpen}
+              target={`${token.symbol.toLowerCase()}ATokenTooltip`}
+              toggle={() => setIsATokenOpen(!isATokenOpen)}
+            >
+              {new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD'
+              }).format(aTokenBalanceInUsd)}
+            </Tooltip>
+          </p>
+          <hr className="my-3" />
+          <p
+            className="details"
             id={`${token.symbol.toLowerCase()}BorrowedTooltip`}
           >
             Borrowed:{' '}
@@ -77,9 +118,9 @@ const Balance = (props: Props) => {
             </span>
             <Tooltip
               placement="top"
-              isOpen={isOpen}
+              isOpen={isBorrowOpen}
               target={`${token.symbol.toLowerCase()}BorrowedTooltip`}
-              toggle={() => setIsOpen(!isOpen)}
+              toggle={() => setIsBorrowOpen(!isBorrowOpen)}
             >
               {new Intl.NumberFormat('en-US', {
                 style: 'currency',
