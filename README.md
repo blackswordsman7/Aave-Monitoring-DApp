@@ -1,7 +1,7 @@
-## Aave Monitoring
+## DeFi-Verse dApp
 
 ### Dashboard
-Check the live demo here --> [https://aave-monitoring.herokuapp.com](https://aave-monitoring.herokuapp.com)
+Check the live demo here --> [https://defi-verse.herokuapp.com](https://defi-verse.herokuapp.com)
 
 You can now glance all the data related to the Aave Protocol at one place.
 Below are some of the stats we highlight:
