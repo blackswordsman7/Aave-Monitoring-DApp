@@ -20,9 +20,9 @@ DB_USER = os.getenv("DB_USER")
 DB_PASS = os.getenv("DB_PASS")
 DB_HOST = os.getenv("DB_HOST")
 DB_NAME = os.getenv("DB_NAME")
-INFURA  = os.getenv("INFURA_KEY")
 
-w3 = Web3(Web3.HTTPProvider(INFURA))
+
+w3 = Web3(Web3.HTTPProvider(kovan.infura.io/v3/3a0f86c115cc40ee8a2355ea58a6f3430))
 
 with open("LendingPool.json") as f:
     info_json = json.load(f)
