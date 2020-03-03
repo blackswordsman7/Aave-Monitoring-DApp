@@ -19,7 +19,7 @@ eth-keys==0.2.4
 eth-rlp==0.1.2
 eth-typing==2.1.0
 eth-utils==1.7.0
-Flask==0.12.2
+Flask==1.0
 Flask-Cors==3.0.8
 gunicorn==19.9.0
 hexbytes==0.2.0
