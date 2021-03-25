@@ -49,7 +49,7 @@ pyrsistent==0.15.5
 pyserial==3.4
 python-debian==0.1.32
 python-dotenv==0.10.3
-PyYAML==3.12
+PyYAML==5.4
 requests==2.22.0
 requests-unixsocket==0.1.5
 rlp==1.1.0
