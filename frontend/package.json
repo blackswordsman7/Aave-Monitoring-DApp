@@ -33,7 +33,7 @@
   },
   "dependencies": {
     "bizcharts": "^3.5.6",
-    "chart.js": "2.9.2",
+    "chart.js": "2.9.4",
     "classnames": "2.2.6",
     "connected-react-router": "^6.5.2",
     "ethereum-dex-prices-service": "^0.1.2",
