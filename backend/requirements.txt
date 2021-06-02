@@ -58,7 +58,7 @@ six==1.11.0
 systemd-python==234
 toolz==0.10.0
 Twisted==17.9.0
-urllib3==1.22
+urllib3==1.26.5
 varint==1.0.2
 web3==5.2.2
 websockets==7.0
