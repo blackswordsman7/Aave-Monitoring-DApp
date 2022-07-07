@@ -38,7 +38,7 @@
     "connected-react-router": "^6.5.2",
     "ethereum-dex-prices-service": "^0.1.2",
     "identicon.js": "^2.3.3",
-    "moment": "2.24.0",
+    "moment": "2.29.4",
     "node-sass": "4.13.0",
     "nouislider": "14.0.3",
     "numeral": "^2.0.6",
